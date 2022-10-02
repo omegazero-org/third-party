@@ -1,0 +1,467 @@
+
+:root{
+	--is-dark-theme: true;
+	--color-primary: #ef7905;
+	--color-primary-dark-1: #F88010;
+	--color-primary-dark-2: #F98D29;
+	--color-primary-dark-3: #FA9B42;
+	--color-primary-dark-4: #FAA85A;
+	--color-primary-dark-5: #FBBA7D;
+	--color-primary-dark-6: #FCCFA5;
+	--color-primary-dark-7: #FDE4CD;
+	--color-primary-light-1: #D06705;
+	--color-primary-light-2: #B35804;
+	--color-primary-light-3: #9A4C03;
+	--color-primary-light-4: #814003;
+	--color-primary-light-5: #633102;
+	--color-primary-light-6: #3B1D01;
+	--color-primary-light-7: #0E0700;
+	--color-primary-alpha-10: #ef790519;
+	--color-primary-alpha-20: #ef790533;
+	--color-primary-alpha-30: #ef79054b;
+	--color-primary-alpha-40: #ef790566;
+	--color-primary-alpha-50: #ef790580;
+	--color-primary-alpha-60: #ef790599;
+	--color-primary-alpha-70: #ef7905b3;
+	--color-primary-alpha-80: #ef7905cc;
+	--color-primary-alpha-90: #ef7905e1;
+	--color-secondary: #404040;
+	--color-secondary-dark-1: #4C4C4C;
+	--color-secondary-dark-2: #595959;
+	--color-secondary-dark-3: #666666;
+	--color-secondary-dark-4: #727272;
+	--color-secondary-dark-5: #7F7F7F;
+	--color-secondary-dark-6: #8E8E8E;
+	--color-secondary-dark-7: #9E9E9E;
+	--color-secondary-dark-8: #ADADAD;
+	--color-secondary-dark-9: #BFBFBF;
+	--color-secondary-dark-10: #CECECE;
+	--color-secondary-dark-11: #E0E0E0;
+	--color-secondary-dark-12: #EFEFEF;
+	--color-secondary-dark-13: #FCFCFC;
+	--color-secondary-light-1: #333333;
+	--color-secondary-light-2: #262626;
+	--color-secondary-light-3: #191919;
+	--color-secondary-light-4: #0C0C0C;
+	--color-secondary-alpha-10: #40404019;
+	--color-secondary-alpha-20: #40404033;
+	--color-secondary-alpha-30: #4040404b;
+	--color-secondary-alpha-40: #40404066;
+	--color-secondary-alpha-50: #40404080;
+	--color-secondary-alpha-60: #40404099;
+	--color-secondary-alpha-70: #404040b3;
+	--color-secondary-alpha-80: #404040cc;
+	--color-secondary-alpha-90: #404040e1;
+	--color-red: #db2828;
+	--color-orange: #f2711c;
+	--color-yellow: #fbbd08;
+	--color-olive: #b5cc18;
+	--color-green: #21ba45;
+	--color-teal: #00b5ad;
+	--color-blue: #2185d0;
+	--color-violet: #6435c9;
+	--color-purple: #a333c8;
+	--color-pink: #e03997;
+	--color-brown: #a5673f;
+	--color-grey: #767a85;
+	--color-black: #1e222e;
+	--color-gold: #a1882b;
+	--color-white: #ffffff;
+	--color-diff-removed-word-bg: #6f3333;
+	--color-diff-added-word-bg: #3c653c;
+	--color-diff-removed-row-bg: #3c2626;
+	--color-diff-moved-row-bg: #818044;
+	--color-diff-added-row-bg: #283e2d;
+	--color-diff-removed-row-border: #634343;
+	--color-diff-moved-row-border: #bcca6f;
+	--color-diff-added-row-border: #314a37;
+	--color-diff-inactive: #353846;
+	--color-error-border: #a53a37;
+	--color-error-bg: #482c2c;
+	--color-error-text: #ff4433;
+	--color-success-border: #458a57;
+	--color-success-bg: #284034;
+	--color-success-text: #6cc664;
+	--color-warning-border: #bb9d00;
+	--color-warning-bg: #3a3a30;
+	--color-warning-text: #fbbd08;
+	--color-info-border: #306090;
+	--color-info-bg: #26354c;
+	--color-info-text: #38a8e8;
+	--color-body: #0a0a0a;
+	--color-box-header: #000000;
+	--color-box-body: #000000;
+	--color-text-dark: #dbe0e0;
+	--color-text: #bbc0c0;
+	--color-text-light: #a8a8a8;
+	--color-text-light-2: #909090;
+	--color-text-light-3: #737373;
+	--color-footer: #000000;
+	--color-timeline: #000000;
+	--color-input-text: #d5d5d5;
+	--color-input-background: #202020;
+	--color-input-border: #404040;
+	--color-input-border-hover: #555555;
+	--color-navbar: #000000;
+	--color-navbar-transparent: #00000000;
+	--color-light: #00000028;
+	--color-light-mimic-enabled: rgba(0, 0, 0, calc(40 / 255 * 222 / 255 / var(--opacity-disabled)));
+	--color-light-border: #ffffff28;
+	--color-hover: #ffffff10;
+	--color-active: #ffffff16;
+	--color-menu: #000000;
+	--color-card: #000000;
+	--color-markup-table-row: #ffffff06;
+	--color-markup-code-block: #202020;
+	--color-button: #303030;
+	--color-code-bg: #1a1a1a;
+	--color-code-sidebar-bg: #000000;
+	--color-shadow: #00000060;
+	--color-secondary-bg: #000000;
+	--color-text-focus: #fff;
+	--color-expand-button: #404040;
+	--color-placeholder-text: #737373;
+	--color-editor-line-highlight: var(--color-primary-light-5);
+	--color-project-board-bg: var(--color-secondary-light-2);
+	--color-caret: var(--color-text);
+	--color-reaction-bg: #ffffff12;
+	--color-reaction-active-bg: var(--color-primary-alpha-40);
+}
+
+.repository.file.list #repo-files-table tr:hover{
+	background-color: #222;
+}
+
+.following.bar.light{
+	background: #000000;
+}
+
+a:hover{
+	text-decoration: none;
+	background-color: var(--color-primary-alpha-10);
+	border-radius: 2px;
+}
+
+.ui.tabular.menu .item{
+	border: none;
+}
+
+.tag-code, .tag-code td{
+	background: var(--color-secondary) !important;
+}
+
+.tag-code td.lines-num{
+	background-color: var(--color-secondary-dark-1) !important;
+}
+
+.tag-code td.lines-type-marker, td.blob-hunk{
+	color: #dbdbdb !important;
+}
+
+.lines-num{
+	color: var(--color-text);
+}
+
+.lines-code.active, .lines-code .active{
+	background: #444 !important;
+}
+
+.markup{
+    font-size: 1rem;
+}
+
+.home a{
+	color: var(--color-primary);
+}
+
+
+
+.ui.search>.results{
+ border-color:var(--color-secondary)
+}
+.ui.search>.results .result:hover,
+.ui.category.search>.results .category .result:hover {
+ background: #000000;
+}
+.ui.search>.results .result .title {
+ color:#dbdbdb
+}
+.ui.table>thead>tr>th {
+ background: #000000;
+ color:#dbdbdb!important;
+}
+.ui.header .sub.header {
+ color:var(--color-secondary-dark-6)
+}
+.ui.dividing.header {
+ border-bottom:1px solid var(--color-secondary)
+}
+.ui.modal>.header {
+ background: #000000;
+ color:#dbdbdb
+}
+.ui.modal>.actions {
+ background: #000000;
+ border-color:var(--color-secondary)
+}
+.ui.modal>.content {
+ background:#383c4a
+}
+.minicolors-panel {
+ background: #000000;
+}
+.ui.list .list>.item .description,
+.ui.list>.item .description {
+ color:var(--color-secondary-dark-6)
+}
+.ui.list>.item>.content {
+ color:var(--color-secondary-dark-6)!important
+}
+.repository .navbar .active.item,
+.repository .navbar .active.item:hover {
+ border-color:transparent!important
+}
+.repository .diff-stats li {
+ border-color:var(--color-secondary)
+}
+
+.ui.horizontal.segments > .segment{
+	background-color: #404040;
+}
+
+.following.bar .top.menu a.item:hover{
+	color: #fff;
+}
+
+.feeds .list ul li.private{
+	background: #404040;
+}
+
+.ui.accordion .title:not(.ui){
+	color: #dbdbdb;
+}
+
+.ui.green.labels a.label:hover,
+.ui.basic.green.labels a.label:hover,
+a.ui.ui.ui.green.label:hover,
+a.ui.basic.green.label:hover{
+	color: #fff !important;
+}
+
+.form .help{
+	color: #888;
+}
+.ui .text.light.grey{
+	color: #888 !important;
+}
+.ui.form .fields.error .field textarea,
+.ui.form .fields.error .field select,
+.ui.form .fields.error .field input:not([type]),
+.ui.form .fields.error .field input[type=date],
+.ui.form .fields.error .field input[type=datetime-local],
+.ui.form .fields.error .field input[type=email],
+.ui.form .fields.error .field input[type=number],
+.ui.form .fields.error .field input[type=password],
+.ui.form .fields.error .field input[type=search],
+.ui.form .fields.error .field input[type=tel],
+.ui.form .fields.error .field input[type=time],
+.ui.form .fields.error .field input[type=text],
+.ui.form .fields.error .field input[type=file],
+.ui.form .fields.error .field input[type=url],
+.ui.form .field.error textarea,
+.ui.form .field.error select,
+.ui.form .field.error input:not([type]),
+.ui.form .field.error input[type=date],
+.ui.form .field.error input[type=datetime-local],
+.ui.form .field.error input[type=email],
+.ui.form .field.error input[type=number],
+.ui.form .field.error input[type=password],
+.ui.form .field.error input[type=search],
+.ui.form .field.error input[type=tel],
+.ui.form .field.error input[type=time],
+.ui.form .field.error input[type=text],
+.ui.form .field.error input[type=file],
+.ui.form .field.error input[type=url]{
+	background-color:#522;
+ border:1px solid #7d3434;
+ color:#f9cbcb
+}
+.ui.form .field.error select:focus,
+.ui.form .field.error input:not([type]):focus,
+.ui.form .field.error input[type=date]:focus,
+.ui.form .field.error input[type=datetime-local]:focus,
+.ui.form .field.error input[type=email]:focus,
+.ui.form .field.error input[type=number]:focus,
+.ui.form .field.error input[type=password]:focus,
+.ui.form .field.error input[type=search]:focus,
+.ui.form .field.error input[type=tel]:focus,
+.ui.form .field.error input[type=time]:focus,
+.ui.form .field.error input[type=text]:focus,
+.ui.form .field.error input[type=file]:focus,
+.ui.form .field.error input[type=url]:focus{
+	background-color:#522;
+ border:1px solid #a04141;
+ color:#f9cbcb
+}
+
+
+
+.chroma .hl{
+	background-color: #3f424d;
+}
+.chroma .nl,
+.chroma .nn,
+.chroma .o,
+.chroma .nx,
+.chroma .nt,
+.chroma .nv,
+.chroma .nf{
+	color: var(--color-text);
+}
+.chroma .lnt,
+.chroma .ln{
+	color:#7f7f7f
+}
+.chroma .k{
+	color:#f63
+}
+.chroma .kc{
+	color:#fa1
+}
+.chroma .kd{
+	color:#f63
+}
+.chroma .kn{
+	color:#fa1
+}
+.chroma .kp{
+	color:#5f8700
+}
+.chroma .kr{
+	color:#f63
+}
+.chroma .kt{
+	color:#67d8ef
+}
+.chroma .na{
+	color:#8a8a8a
+}
+.chroma .nb,
+.chroma .bp{
+	color:#9daccc
+}
+.chroma .nc,
+.chroma .no{
+	color:#a6e22b
+}
+.chroma .nd{
+	color:#9daccc
+}
+.chroma .ni{
+	color:#fa1
+}
+.chroma .ne{
+	color:#af8700
+}
+.chroma .vc{
+	color:#f81
+}
+.chroma .vg,
+.chroma .vi{
+	color:#fa1
+}
+.chroma .s,
+.chroma .sa{
+	color:#e7db74
+}
+.chroma .sb{
+	color:#e7db74
+}
+.chroma .sc,
+.chroma .dl{
+	color:#1af
+}
+.chroma .sd{
+	color:#6a737d
+}
+.chroma .s2{
+	color:#e7db74
+}
+.chroma .se{
+	color:#f63
+}
+.chroma .sh{
+	color:#1af
+}
+.chroma .si,
+.chroma .sx{
+	color:#fa1
+}
+.chroma .sr{
+	color:#97c
+}
+.chroma .s1{
+	color:#e7db74
+}
+.chroma .ss{
+	color:#fa1
+}
+.chroma .m,
+.chroma .mb,
+.chroma .mf,
+.chroma .mh,
+.chroma .mi,
+.chroma .il,
+.chroma .mo{
+	color:#1af
+}
+.chroma .ow{
+	color:#5f8700
+}
+.chroma .c,
+.chroma .ch,
+.chroma .cm,
+.chroma .c1{
+	color:#6a737d
+}
+.chroma .cs{
+	color:#637d
+}
+.chroma .cp{
+	color:#fc6
+}
+.chroma .cpf{
+	color:#03dfff
+}
+.chroma .gd{
+	color:#fff;
+ background-color:#5f3737
+}
+.chroma .ge{
+	color:#ef5
+}
+.chroma .gr{
+	color:#f33
+}
+.chroma .gh{
+	color:#fa1
+}
+.chroma .gi{
+	color:#fff;
+ background-color:#3a523a
+}
+.chroma .go{
+	color:#888
+}
+.chroma .gp{
+	color:#555
+}
+.chroma .gu{
+	color:#9daccc
+}
+.chroma .gt{
+	color:#f63
+}
+.chroma .w{
+	color:#bbb
+}

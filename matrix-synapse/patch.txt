@@ -1,0 +1,13 @@
+
+
+patch -uE -i changes.patch -p0 -V none
+
+
+update:
+
+https://matrix-org.github.io/synapse/latest/setup/installation.html
+
+@/mnt/server
+source env/bin/activate
+pip install -U matrix-synapse
+

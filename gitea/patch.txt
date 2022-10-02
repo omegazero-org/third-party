@@ -1,0 +1,8 @@
+
+@/mnt/server/i_main/
+diff -u -r -P repo/templates run/custom/templates > run/template_changes.patch
+
+
+@/mnt/server/i_main/run/
+./template_copy.sh
+patch -u -i template_changes.patch -V none -p1 -s

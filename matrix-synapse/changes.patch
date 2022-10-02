@@ -1,0 +1,11 @@
+--- env/lib/python3.7/site-packages/synapse/http/site.py
++++ env/lib/python3.7/site-packages/synapse/http/site.py
+@@ -535,7 +535,7 @@
+         # if we got an x-forwarded-for header, also look for an x-forwarded-proto header
+         header = self.getHeader(b"x-forwarded-proto")
+         if header is not None:
+-            self._forwarded_https = header.lower() == b"https"
++            self._forwarded_https = header.lower().split(b",")[0].strip() == b"https"
+         else:
+             # this is done largely for backwards-compatibility so that people that
+             # haven't set an x-forwarded-proto header don't get a redirect loop.

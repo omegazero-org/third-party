@@ -1,0 +1,664 @@
+Only in repo/templates: admin
+Only in repo/templates: api
+Only in repo/templates/base: alert.tmpl
+Only in repo/templates/base: alert_details.tmpl
+Only in repo/templates/base: delete_modal_actions.tmpl
+Only in repo/templates/base: disable_form_autofill.tmpl
+Only in repo/templates/base: footer.tmpl
+diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/footer_content.tmpl
+--- repo/templates/base/footer_content.tmpl	2022-10-02 12:28:47.940478592 +0200
++++ run/custom/templates/base/footer_content.tmpl	2022-10-02 12:34:34.542391821 +0200
+@@ -1,20 +1,7 @@
+ <footer>
+ 	<div class="ui container">
+ 		<div class="ui left">
+-			{{.i18n.Tr "powered_by" "Gitea"}}
+-			{{if (or .ShowFooterVersion .PageIsAdmin)}}
+-				{{.i18n.Tr "version"}}:
+-				{{if .IsAdmin}}
+-					<a href="{{AppSubUrl}}/admin/config">{{AppVer}}</a>
+-				{{else}}
+-					{{AppVer}}
+-				{{end}}
+-			{{end}}
+-			{{if and .TemplateLoadTimes ShowFooterTemplateLoadTime}}
+-				{{.i18n.Tr "page"}}: <strong>{{LoadTimes .PageStartTime}}</strong>
+-				{{.i18n.Tr "template"}}
+-				{{if .TemplateName}} {{.TemplateName}}{{end}}: <strong>{{call .TemplateLoadTimes}}</strong>
+-			{{end}}
++			Gitea{{if (or .ShowFooterVersion .PageIsAdmin)}} {{.i18n.Tr "version"}} {{AppVer}}, <span class="version">{{GoVer}}</span>, FreeBSD{{end}}{{if ShowFooterTemplateLoadTime}}, {{.i18n.Tr "page"}}: <strong>{{LoadTimes .PageStartTime}}</strong> {{.i18n.Tr "template"}}:{{if .TemplateName}} {{.TemplateName}}{{end}} <strong>{{call .TemplateLoadTimes}}</strong>{{end}}
+ 		</div>
+ 		<div class="ui right links">
+ 			{{if .ShowFooterBranding}}
+@@ -29,9 +16,10 @@
+ 					{{end}}
+ 				</div>
+ 			</div>
++			<a target="_blank" rel="noopener noreferrer" href="https://omegazero.org/">omegazero.org</a>
+ 			<a href="{{AssetUrlPrefix}}/js/licenses.txt">{{.i18n.Tr "licenses"}}</a>
+ 			{{if .EnableSwagger}}<a href="{{AppSubUrl}}/api/swagger">API</a>{{end}}
+-			<a target="_blank" rel="noopener noreferrer" href="https://gitea.io">{{.i18n.Tr "website"}}</a>
++			<a target="_blank" rel="noopener noreferrer" href="https://gitea.io">Gitea Website</a>
+ 			{{template "custom/extra_links_footer" .}}
+ 		</div>
+ 	</div>
+diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
+--- repo/templates/base/head.tmpl	2022-10-02 12:28:47.946665718 +0200
++++ run/custom/templates/base/head.tmpl	2022-10-02 12:35:48.381371656 +0200
+@@ -4,13 +4,13 @@
+ 	<meta charset="utf-8">
+ 	<meta name="viewport" content="width=device-width, initial-scale=1">
+ 	<title>{{if .Title}}{{.Title | RenderEmojiPlain}} - {{end}} {{if .Repository.Name}}{{.Repository.Name}} - {{end}}{{AppName}}</title>
+-	<link rel="manifest" href="data:{{.ManifestData}}">
++	<link rel="manifest" href="data:{{.ManifestData}}"/>
+ 	<meta name="theme-color" content="{{ThemeColorMetaTag}}">
+-	<meta name="default-theme" content="{{DefaultTheme}}">
+-	<meta name="author" content="{{if .Repository}}{{.Owner.Name}}{{else}}{{MetaAuthor}}{{end}}">
+-	<meta name="description" content="{{if .Repository}}{{.Repository.Name}}{{if .Repository.Description}} - {{.Repository.Description}}{{end}}{{else}}{{MetaDescription}}{{end}}">
++	<meta name="default-theme" content="{{DefaultTheme}}" />
++	<meta name="author" content="{{if .Repository}}{{.Owner.Name}}{{else}}{{MetaAuthor}}{{end}}" />
++	<meta name="description" content="{{if .Repository}}{{.Repository.Name}}{{if .Repository.Description}} - {{.Repository.Description}}{{end}}{{else}}{{MetaDescription}}{{end}}" />
+ 	<meta name="keywords" content="{{MetaKeywords}}">
+-	<meta name="referrer" content="no-referrer">
++	<meta name="referrer" content="strict-origin" />
+ {{if .GoGetImport}}
+ 	<meta name="go-import" content="{{.GoGetImport}} git {{.RepoCloneLink.HTTPS}}">
+ 	<meta name="go-source" content="{{.GoGetImport}} _ {{.GoDocDirectory}} {{.GoDocFile}}">
+@@ -19,9 +19,8 @@
+ 	<link rel="alternate" type="application/atom+xml" title="" href="{{.FeedURL}}.atom">
+ 	<link rel="alternate" type="application/rss+xml" title="" href="{{.FeedURL}}.rss">
+ {{end}}
+-	<link rel="icon" href="{{AssetUrlPrefix}}/img/favicon.svg" type="image/svg+xml">
+-	<link rel="alternate icon" href="{{AssetUrlPrefix}}/img/favicon.png" type="image/png">
+ 	<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/index.css?v={{MD5 AppVer}}">
++	<link rel="icon" href="https://static.omegazero.org/c/git/assets/img/favicon.png" type="image/png">
+ 	{{template "base/head_script" .}}
+ 	<noscript>
+ 		<style>
+@@ -30,41 +29,41 @@
+ 		</style>
+ 	</noscript>
+ {{if .PageIsUserProfile}}
+-	<meta property="og:title" content="{{.Owner.DisplayName}}">
+-	<meta property="og:type" content="profile">
+-	<meta property="og:image" content="{{.Owner.AvatarLink}}">
+-	<meta property="og:url" content="{{.Owner.HTMLURL}}">
++	<meta property="og:title" content="{{.Owner.Name}}" />
++	<meta property="og:type" content="profile" />
++	<meta property="og:image" content="{{.Owner.AvatarLink}}" />
++	<meta property="og:url" content="{{.Owner.HTMLURL}}" />
+ 	{{if .Owner.Description}}
+ 		<meta property="og:description" content="{{.Owner.Description}}">
+ 	{{end}}
+ {{else if .Repository}}
+ 	{{if .Issue}}
+-		<meta property="og:title" content="{{.Issue.Title}}">
+-		<meta property="og:url" content="{{.Issue.HTMLURL}}">
++		<meta property="og:title" content="{{.Issue.Title}}" />
++		<meta property="og:url" content="{{.Issue.HTMLURL}}" />
+ 		{{if .Issue.Content}}
+-			<meta property="og:description" content="{{.Issue.Content}}">
++			<meta property="og:description" content="{{.Issue.Content}}" />
+ 		{{end}}
+ 	{{else}}
+-		<meta property="og:title" content="{{.Repository.Name}}">
+-		<meta property="og:url" content="{{.Repository.HTMLURL}}">
++		<meta property="og:title" content="{{.Repository.Name}}" />
++		<meta property="og:url" content="{{.Repository.HTMLURL}}" />
+ 		{{if .Repository.Description}}
+-			<meta property="og:description" content="{{.Repository.Description}}">
++			<meta property="og:description" content="{{.Repository.Description}}" />
+ 		{{end}}
+ 	{{end}}
+-	<meta property="og:type" content="object">
++	<meta property="og:type" content="object" />
+ 	{{if .Repository.AvatarLink}}
+-		<meta property="og:image" content="{{.Repository.AvatarLink}}">
++		<meta property="og:image" content="{{.Repository.AvatarLink}}" />
+ 	{{else}}
+-		<meta property="og:image" content="{{.Repository.Owner.AvatarLink}}">
++		<meta property="og:image" content="{{.Repository.Owner.AvatarLink}}" />
+ 	{{end}}
+ {{else}}
+ 	<meta property="og:title" content="{{AppName}}">
+-	<meta property="og:type" content="website">
+-	<meta property="og:image" content="{{AssetUrlPrefix}}/img/logo.png">
+-	<meta property="og:url" content="{{AppUrl}}">
++	<meta property="og:type" content="website" />
++	<meta property="og:image" content="https://static.omegazero.org/c/git/assets/img/favicon.png" />
++	<meta property="og:url" content="{{AppUrl}}" />
+ 	<meta property="og:description" content="{{MetaDescription}}">
+ {{end}}
+-<meta property="og:site_name" content="{{AppName}}">
++<meta property="og:site_name" content="{{AppName}}" />
+ {{if .IsSigned }}
+ 	{{ if ne .SignedUser.Theme "gitea" }}
+ 		<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/theme-{{.SignedUser.Theme | PathEscape}}.css?v={{MD5 AppVer}}">
+@@ -73,6 +72,7 @@
+ 	<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/theme-{{DefaultTheme | PathEscape}}.css?v={{MD5 AppVer}}">
+ {{end}}
+ {{template "custom/header" .}}
++<script src="/assets/custom/mirrorlink.js"></script>
+ </head>
+ <body>
+ 	{{template "custom/body_outer_pre" .}}
+diff -u -r -P repo/templates/base/head_navbar.tmpl run/custom/templates/base/head_navbar.tmpl
+--- repo/templates/base/head_navbar.tmpl	2022-10-02 12:28:47.951954599 +0200
++++ run/custom/templates/base/head_navbar.tmpl	2022-10-02 12:34:34.552178140 +0200
+@@ -5,7 +5,7 @@
+ 	{{end}}
+ 	<div class="item brand" style="justify-content: space-between;">
+ 		<a href="{{AppSubUrl}}/" aria-label="{{if .IsSigned}}{{.i18n.Tr "dashboard"}}{{else}}{{.i18n.Tr "home"}}{{end}}">
+-			<img class="ui mini image" width="30" height="30" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{.i18n.Tr "logo"}}" aria-hidden="true">
++			<img class="ui mini image" width="30" height="30" src="https://static.omegazero.org/p/w/icon_transparent.png" alt="{{.i18n.Tr "logo"}}" aria-hidden="true">
+ 		</a>
+ 		{{if .IsSigned}}
+ 		<a href="{{AppSubUrl}}/notifications" class="tooltip mobile-only" data-content='{{.i18n.Tr "notifications"}}'>
+@@ -91,7 +91,7 @@
+ 					<a class="stopwatch-link df ac" href="{{.ActiveStopwatch.IssueLink}}">
+ 						{{svg "octicon-issue-opened"}}
+ 						<span class="stopwatch-issue">{{.ActiveStopwatch.RepoSlug}}#{{.ActiveStopwatch.IssueIndex}}</span>
+-						<span class="ui primary label stopwatch-time my-0 mx-4" data-seconds="{{.ActiveStopwatch.Seconds}}">
++						<span class="ui label blue stopwatch-time my-0 mx-4" data-seconds="{{.ActiveStopwatch.Seconds}}">
+ 							{{if .ActiveStopwatch}}{{Sec2Time .ActiveStopwatch.Seconds}}{{end}}
+ 						</span>
+ 					</a>
+@@ -173,10 +173,6 @@
+ 						{{svg "octicon-tools"}}
+ 						{{.i18n.Tr "your_settings"}}<!-- Your settings -->
+ 					</a>
+-					<a class="item" target="_blank" rel="noopener noreferrer" href="https://docs.gitea.io">
+-						{{svg "octicon-question"}}
+-						{{.i18n.Tr "help"}}<!-- Help -->
+-					</a>
+ 					{{if .IsAdmin}}
+ 						<div class="divider"></div>
+ 
+@@ -187,15 +183,14 @@
+ 					{{end}}
+ 
+ 					<div class="divider"></div>
+-					<a class="item link-action" href data-url="{{AppSubUrl}}/user/logout" data-redirect="{{AppSubUrl}}/">
++					<a class="item" href="https://account.omegazero.org/logout/?flcid=00000000787fb10844c46d3a5024f40c">
+ 						{{svg "octicon-sign-out"}}
+-						{{.i18n.Tr "sign_out"}}<!-- Sign Out -->
++						SSO Logout
+ 					</a>
+ 				</div><!-- end content avatar menu -->
+ 			</div><!-- end dropdown avatar menu -->
+ 		</div><!-- end signed user right menu -->
+ 	{{else}}
+-		<a class="item" target="_blank" rel="noopener noreferrer" href="https://docs.gitea.io">{{.i18n.Tr "help"}}</a>
+ 		<div class="right stackable menu">
+ 			{{if .ShowRegistrationButton}}
+ 				<a class="item{{if .PageIsSignUp}} active{{end}}" href="{{AppSubUrl}}/user/sign_up">
+Only in repo/templates/base: head_script.tmpl
+Only in repo/templates/base: paginate.tmpl
+Only in repo/templates: custom
+Only in repo/templates: explore
+diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
+--- repo/templates/home.tmpl	2022-10-02 12:28:47.962368975 +0200
++++ run/custom/templates/home.tmpl	2022-10-02 12:34:34.563758454 +0200
+@@ -2,51 +2,28 @@
+ <div class="page-content home">
+ 	<div class="ui stackable middle very relaxed page grid">
+ 		<div class="sixteen wide center aligned centered column">
+-			<div>
+-				<img class="logo" width="220" height="220" src="{{AssetUrlPrefix}}/img/logo.svg"/>
++			<div style="margin-bottom: 20px;">
++				<img class="logo" width="64" height="64" src="https://static.omegazero.org/p/w/icon_transparent.png"/>
+ 			</div>
+-			<div class="hero">
+-				<h1 class="ui icon header title">
+-					{{AppName}}
+-				</h1>
+-				<h2>{{.i18n.Tr "startpage.app_desc"}}</h2>
+-			</div>
++			<h3>Hello, welcome to git.omegazero.org</h3>
+ 		</div>
+ 	</div>
+-	<div class="ui stackable middle very relaxed page grid">
+-		<div class="eight wide center column">
+-			<h1 class="hero ui icon header">
+-				{{svg "octicon-flame"}} {{.i18n.Tr "startpage.install"}}
+-			</h1>
+-			<p class="large">
+-				{{.i18n.Tr "startpage.install_desc" | Str2html}}
+-			</p>
++	<div class="ui stackable middle page grid">
++		<div class="eight wide aligned centered column">
++			This is the main <i>omegazero.org</i> git server which hosts most of our open source code and is also available for use by other individuals. There are a few more open source applications which do not use version control and are only available at <a href="https://source.omegazero.org/">source.omegazero.org</a>.
+ 		</div>
+-		<div class="eight wide center column">
+-			<h1 class="hero ui icon header">
+-				{{svg "octicon-device-desktop"}} {{.i18n.Tr "startpage.platform"}}
+-			</h1>
+-			<p class="large">
+-				{{.i18n.Tr "startpage.platform_desc" | Str2html}}
+-			</p>
+-		</div>
+-	</div>
+-	<div class="ui stackable middle very relaxed page grid">
+-		<div class="eight wide center column">
+-			<h1 class="hero ui icon header">
+-				{{svg "octicon-rocket"}} {{.i18n.Tr "startpage.lightweight"}}
+-			</h1>
+-			<p class="large">
+-				{{.i18n.Tr "startpage.lightweight_desc" | Str2html}}
+-			</p>
+-		</div>
+-		<div class="eight wide center column">
+-			<h1 class="hero ui icon header">
+-				{{svg "octicon-code"}} {{.i18n.Tr "startpage.license"}}
+-			</h1>
+-			<p class="large">
+-				{{.i18n.Tr "startpage.license_desc" | Str2html}}
+-			</p>
++		<div class="eight wide aligned centered column">
++			<ul>
++				<li class="">
++					<a href="/omegazero">omegazero source code</a>
++				</li>
++				<li class="">
++					<a href="/explore/repos">Explore repositories</a>
++				</li>
++				<li class="">
++					<a href="https://source.omegazero.org/">Explore more source code on source.omegazero.org</a>
++				</li>
++			</ul>
+ 		</div>
+ 	</div>
+ </div>
+Only in repo/templates: install.tmpl
+Only in repo/templates: mail
+Only in repo/templates: org
+Only in repo/templates: package
+Only in repo/templates: post-install.tmpl
+Only in repo/templates: repo
+Only in repo/templates: shared
+Only in repo/templates: status
+Only in repo/templates: swagger
+Only in repo/templates/user/auth: activate.tmpl
+Only in repo/templates/user/auth: change_passwd.tmpl
+Only in repo/templates/user/auth: change_passwd_inner.tmpl
+Only in repo/templates/user/auth: finalize_openid.tmpl
+Only in repo/templates/user/auth: forgot_passwd.tmpl
+Only in repo/templates/user/auth: grant.tmpl
+Only in repo/templates/user/auth: grant_error.tmpl
+diff -u -r -P repo/templates/user/auth/link_account.tmpl run/custom/templates/user/auth/link_account.tmpl
+--- repo/templates/user/auth/link_account.tmpl	2022-10-02 12:28:47.968367347 +0200
++++ run/custom/templates/user/auth/link_account.tmpl	2022-10-02 12:34:34.567744241 +0200
+@@ -4,28 +4,18 @@
+ 		<div class="new-menu-inner">
+ 			<!-- TODO handle .ShowRegistrationButton once other login bugs are fixed -->
+ 			{{if not .AllowOnlyInternalRegistration}}
+-				<a class="item {{if not .user_exists}}active{{end}}"
++				<a class="item active"
+ 					data-tab="auth-link-signup-tab">
+ 					{{.i18n.Tr "auth.oauth_signup_tab"}}
+ 				</a>
+ 			{{end}}
+-			<a class="item {{if .user_exists}}active{{end}}"
+-				data-tab="auth-link-signin-tab">
+-				{{.i18n.Tr "auth.oauth_signin_tab"}}
+-			</a>
+ 		</div>
+ 	</div>
+ 	<div class="ui middle very relaxed page grid">
+ 		<div class="column">
+-			<div class="ui tab {{if not .user_exists}}active{{end}}"
++			<div class="ui tab active"
+ 				data-tab="auth-link-signup-tab">
+ 				{{template "user/auth/signup_inner" .}}
+-			</div>
+-			<div class="ui tab {{if .user_exists}}active{{end}}"
+-				data-tab="auth-link-signin-tab">
+-				<div class="ui user signin container icon">
+-					{{template "user/auth/signin_inner" .}}
+-				</div>
+ 			</div>
+ 		</div>
+ 	</div>
+Only in repo/templates/user/auth: oidc_wellknown.tmpl
+Only in repo/templates/user/auth: prohibit_login.tmpl
+Only in repo/templates/user/auth: reset_passwd.tmpl
+Only in repo/templates/user/auth: signin.tmpl
+diff -u -r -P repo/templates/user/auth/signin_inner.tmpl run/custom/templates/user/auth/signin_inner.tmpl
+--- repo/templates/user/auth/signin_inner.tmpl	2022-10-02 12:28:47.972740321 +0200
++++ run/custom/templates/user/auth/signin_inner.tmpl	2022-10-02 12:34:34.571621134 +0200
+@@ -11,66 +11,17 @@
+ 		<div class="ui attached segment">
+ 			<form class="ui form" action="{{.SignInLink}}" method="post">
+ 			{{.CsrfTokenHtml}}
+-			<div class="required inline field {{if and (.Err_UserName) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn))}}error{{end}}">
+-				<label for="user_name">{{.i18n.Tr "home.uname_holder"}}</label>
+-				<input id="user_name" type="text" name="user_name" value="{{.user_name}}" autofocus required>
+-			</div>
+-			{{if or (not .DisablePassword) .LinkAccountMode}}
+-			<div class="required inline field {{if and (.Err_Password) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn))}}error{{end}}">
+-				<label for="password">{{.i18n.Tr "password"}}</label>
+-				<input id="password" name="password" type="password" value="{{.password}}" autocomplete="current-password" required>
+-			</div>
+-			{{end}}
+-			{{if not .LinkAccountMode}}
+-			<div class="inline field">
+-				<label></label>
+-				<div class="ui checkbox">
+-					<label>{{.i18n.Tr "auth.remember_me"}}</label>
+-					<input name="remember" type="checkbox">
+-				</div>
+-			</div>
+-			{{end}}
+ 
+-			<div class="inline field">
+-				<label></label>
+-				<button class="ui green button">
+-					{{if .LinkAccountMode}}
+-						{{.i18n.Tr "auth.oauth_signin_submit"}}
+-					{{else}}
+-						{{.i18n.Tr "sign_in"}}
+-					{{end}}
+-				</button>
+-				<a href="{{AppSubUrl}}/user/forgot_password">{{.i18n.Tr "auth.forgot_password"}}</a>
+-			</div>
+-
+-			{{if .ShowRegistrationButton}}
+-				<div class="inline field">
+-					<label></label>
+-					<a href="{{AppSubUrl}}/user/sign_up">{{.i18n.Tr "auth.sign_up_now" | Str2html}}</a>
+-				</div>
+-			{{end}}
+-
+-			{{if and .OrderedOAuth2Names .OAuth2Providers}}
+-			<div class="ui attached segment">
+ 				<div class="oauth2 center">
+ 					<div id="oauth2-login-loader" class="ui disabled centered loader"></div>
+ 					<div>
+ 						<div id="oauth2-login-navigator">
+-							<p>{{.i18n.Tr "sign_in_with"}}</p>
+-							{{range $key := .OrderedOAuth2Names}}
+-								{{$provider := index $.OAuth2Providers $key}}
+-								<a href="{{AppSubUrl}}/user/oauth2/{{$key}}">
+-									<img
+-										alt="{{$provider.DisplayName}}{{if eq $provider.Name "openidConnect"}} ({{$key}}){{end}}"
+-										title="{{$provider.DisplayName}}{{if eq $provider.Name "openidConnect"}} ({{$key}}){{end}}"
+-										class="{{$provider.Name}} oauth-login-image"
+-										src="{{AppSubUrl}}{{$provider.Image}}"
+-									></a>
+-							{{end}}
++							<div>Continue with omegazero SSO</div><br /><br />
++							<a href="{{AppSubUrl}}/user/oauth2/omzsso">
++								<img alt="omegazero logo" class="openidConnect oauth-login-image" src="https://static.omegazero.org/p/w/icon_transparent.png" />
++							</a>
+ 						</div>
+ 					</div>
+ 				</div>
+-			</div>
+-			{{end}}
+ 			</form>
+ 		</div>
+Only in repo/templates/user/auth: signin_navbar.tmpl
+Only in repo/templates/user/auth: signin_openid.tmpl
+Only in repo/templates/user/auth: signup.tmpl
+Only in repo/templates/user/auth: signup_inner.tmpl
+Only in repo/templates/user/auth: signup_openid_connect.tmpl
+Only in repo/templates/user/auth: signup_openid_navbar.tmpl
+Only in repo/templates/user/auth: signup_openid_register.tmpl
+Only in repo/templates/user/auth: twofa.tmpl
+Only in repo/templates/user/auth: twofa_scratch.tmpl
+Only in repo/templates/user/auth: webauthn.tmpl
+Only in repo/templates/user/auth: webauthn_error.tmpl
+Only in repo/templates/user: dashboard
+Only in repo/templates/user: heatmap.tmpl
+Only in repo/templates/user: notification
+Only in repo/templates/user: overview
+Only in repo/templates/user: profile.tmpl
+Only in repo/templates/user: project.tmpl
+diff -u -r -P repo/templates/user/settings/account.tmpl run/custom/templates/user/settings/account.tmpl
+--- repo/templates/user/settings/account.tmpl	2022-10-02 12:28:47.978509082 +0200
++++ run/custom/templates/user/settings/account.tmpl	2022-10-02 12:34:34.575616439 +0200
+@@ -7,35 +7,7 @@
+ 			{{.i18n.Tr "settings.password"}}
+ 		</h4>
+ 		<div class="ui attached segment">
+-			{{if or (.SignedUser.IsLocal) (.SignedUser.IsOAuth2)}}
+-			<form class="ui form ignore-dirty" action="{{AppSubUrl}}/user/settings/account" method="post">
+-				{{template "base/disable_form_autofill"}}
+-				{{.CsrfTokenHtml}}
+-				{{if .SignedUser.IsPasswordSet}}
+-				<div class="required field {{if .Err_OldPassword}}error{{end}}">
+-					<label for="old_password">{{.i18n.Tr "settings.old_password"}}</label>
+-					<input id="old_password" name="old_password" type="password" autocomplete="current-password" autofocus required>
+-				</div>
+-				{{end}}
+-				<div class="required field {{if .Err_Password}}error{{end}}">
+-					<label for="password">{{.i18n.Tr "settings.new_password"}}</label>
+-					<input id="password" name="password" type="password" autocomplete="new-password" required>
+-				</div>
+-				<div class="required field {{if .Err_Password}}error{{end}}">
+-					<label for="retype">{{.i18n.Tr "settings.retype_new_password"}}</label>
+-					<input id="retype" name="retype" type="password" autocomplete="new-password" required>
+-				</div>
+-
+-				<div class="field">
+-					<button class="ui green button">{{$.i18n.Tr "settings.change_password"}}</button>
+-					<a href="{{AppSubUrl}}/user/forgot_password?email={{.Email}}">{{.i18n.Tr "auth.forgot_password"}}</a>
+-				</div>
+-			</form>
+-			{{else}}
+-			<div class="ui info message">
+-				<p class="text left">{{$.i18n.Tr "settings.password_change_disabled"}}</p>
+-			</div>
+-			{{end}}
++			<a class="ui button" href="https://account.omegazero.org/manage/account/password/">Change SSO password</a>
+ 		</div>
+ 
+ 		<h4 class="ui top attached header">
+Only in repo/templates/user/settings: appearance.tmpl
+Only in repo/templates/user/settings: applications.tmpl
+diff -u -r -P repo/templates/user/settings/applications_oauth2.tmpl run/custom/templates/user/settings/applications_oauth2.tmpl
+--- repo/templates/user/settings/applications_oauth2.tmpl	2022-10-02 12:28:47.982853984 +0200
++++ run/custom/templates/user/settings/applications_oauth2.tmpl	2022-10-02 12:34:34.579393677 +0200
+@@ -1,3 +1,6 @@
++
++{{if .IsAdmin}}
++
+ <h4 class="ui top attached header">
+ 	{{.i18n.Tr "settings.manage_oauth2_applications"}}
+ </h4>
+@@ -57,3 +60,5 @@
+ 	</div>
+ 	{{template "base/delete_modal_actions" .}}
+ </div>
++
++{{end}}
+Only in repo/templates/user/settings: applications_oauth2_edit.tmpl
+Only in repo/templates/user/settings: grants_oauth2.tmpl
+Only in repo/templates/user/settings: keys.tmpl
+Only in repo/templates/user/settings: keys_gpg.tmpl
+Only in repo/templates/user/settings: keys_principal.tmpl
+Only in repo/templates/user/settings: keys_ssh.tmpl
+Only in repo/templates/user/settings: navbar.tmpl
+Only in repo/templates/user/settings: organization.tmpl
+diff -u -r -P repo/templates/user/settings/profile.tmpl run/custom/templates/user/settings/profile.tmpl
+--- repo/templates/user/settings/profile.tmpl	2022-10-02 12:28:47.987538556 +0200
++++ run/custom/templates/user/settings/profile.tmpl	2022-10-02 12:34:34.583383515 +0200
+@@ -99,38 +99,8 @@
+ 			{{.i18n.Tr "settings.avatar"}}
+ 		</h4>
+ 		<div class="ui attached segment">
+-			<form class="ui form" action="{{.Link}}/avatar" method="post" enctype="multipart/form-data">
+-				{{.CsrfTokenHtml}}
+-				{{if not DisableGravatar}}
+-				<div class="inline field">
+-					<div class="ui radio checkbox">
+-						<input name="source" value="lookup" type="radio" {{if not .SignedUser.UseCustomAvatar}}checked{{end}}>
+-						<label>{{.i18n.Tr "settings.lookup_avatar_by_mail"}}</label>
+-					</div>
+-				</div>
+-				<div class="field {{if .Err_Gravatar}}error{{end}}">
+-					<label for="gravatar">Avatar {{.i18n.Tr "email"}}</label>
+-					<input id="gravatar" name="gravatar" value="{{.SignedUser.AvatarEmail}}" />
+-				</div>
+-				{{end}}
+-
+-				<div class="inline field">
+-					<div class="ui radio checkbox">
+-						<input name="source" value="local" type="radio" {{if .SignedUser.UseCustomAvatar}}checked{{end}}>
+-						<label>{{.i18n.Tr "settings.enable_custom_avatar"}}</label>
+-					</div>
+-				</div>
+-
+-				<div class="inline field">
+-					<label for="avatar">{{.i18n.Tr "settings.choose_new_avatar"}}</label>
+-					<input name="avatar" type="file" >
+-				</div>
+-
+-				<div class="field">
+-					<button class="ui green button">{{$.i18n.Tr "settings.update_avatar"}}</button>
+-					<a class="ui red button delete-post" data-request-url="{{.Link}}/avatar/delete" data-done-url="{{.Link}}">{{$.i18n.Tr "settings.delete_current_avatar"}}</a>
+-				</div>
+-			</form>
++			<a class="ui button" href="https://account.omegazero.org/manage/account/avatar/">Edit avatar</a><br /><br />
++			You may need to re-login to see changes.
+ 		</div>
+ 	</div>
+ </div>
+Only in repo/templates/user/settings: repos.tmpl
+diff -u -r -P repo/templates/user/settings/security/accountlinks.tmpl run/custom/templates/user/settings/security/accountlinks.tmpl
+--- repo/templates/user/settings/security/accountlinks.tmpl	2022-10-02 12:28:47.992204342 +0200
++++ run/custom/templates/user/settings/security/accountlinks.tmpl	2022-10-02 12:34:34.587337071 +0200
+@@ -1,53 +1,20 @@
+ <h4 class="ui top attached header">
+ 	{{.i18n.Tr "settings.manage_account_links"}}
+-	{{if .OrderedOAuth2Names}}
+-		<div class="ui right">
+-			<div class="ui dropdown">
+-				<div class="ui primary tiny button">{{.i18n.Tr "settings.link_account"}}</div>
+-				<div class="menu">
+-					{{range $key := .OrderedOAuth2Names}}
+-						{{$provider := index $.OAuth2Providers $key}}
+-						<a class="item" href="{{AppSubUrl}}/user/oauth2/{{$key}}">
+-							<img width="20" height="20" src="{{AppSubUrl}}{{$provider.Image}}" alt="{{$provider.DisplayName}}">
+-							{{$provider.DisplayName}}
+-						</a>
+-					{{end}}
+-				</div>
+-			</div>
+-		</div>
+-	{{end}}
+ </h4>
+-
+ <div class="ui attached segment">
+ 	<div class="ui key list">
+ 		<div class="item">
+ 			{{.i18n.Tr "settings.manage_account_links_desc"}}
+ 		</div>
+ 		{{if .AccountLinks}}
+-			{{range $loginSource, $provider := .AccountLinks}}
+-				<div class="item">
+-					<div class="right floated content">
+-							<button class="ui red tiny button delete-button" data-modal-id="delete-account-link" data-url="{{AppSubUrl}}/user/settings/security/account_link" data-id="{{$loginSource.ID}}">
+-								{{$.i18n.Tr "settings.delete_key"}}
+-							</button>
+-					</div>
++		{{range $loginSource, $provider := .AccountLinks}}
++			<div class="item">
+ 					<div class="content">
+ 						<strong>{{$provider}}</strong>
+ 						{{if $loginSource.IsActive}}<span class="text red">{{$.i18n.Tr "settings.active"}}</span>{{end}}
+ 					</div>
+-				</div>
+-			{{end}}
++			</div>
+ 		{{end}}
++		{{end}}
+ 	</div>
+-</div>
+-
+-<div class="ui small basic delete modal" id="delete-account-link">
+-	<div class="ui icon header">
+-		{{svg "octicon-trash"}}
+-		{{.i18n.Tr "settings.remove_account_link"}}
+-	</div>
+-	<div class="content">
+-		<p>{{.i18n.Tr "settings.remove_account_link_desc"}}</p>
+-	</div>
+-	{{template "base/delete_modal_actions" .}}
+ </div>
+Only in repo/templates/user/settings/security: openid.tmpl
+diff -u -r -P repo/templates/user/settings/security/security.tmpl run/custom/templates/user/settings/security/security.tmpl
+--- repo/templates/user/settings/security/security.tmpl	2022-10-02 12:28:47.996204637 +0200
++++ run/custom/templates/user/settings/security/security.tmpl	2022-10-02 12:34:34.591114852 +0200
+@@ -4,7 +4,6 @@
+ 	<div class="ui container">
+ 		{{template "base/alert" .}}
+ 		{{template "user/settings/security/twofa" .}}
+-		{{template "user/settings/security/webauthn" .}}
+ 		{{template "user/settings/security/accountlinks" .}}
+ 		{{if .EnableOpenIDSignIn}}
+ 		{{template "user/settings/security/openid" .}}
+diff -u -r -P repo/templates/user/settings/security/twofa.tmpl run/custom/templates/user/settings/security/twofa.tmpl
+--- repo/templates/user/settings/security/twofa.tmpl	2022-10-02 12:28:48.000196502 +0200
++++ run/custom/templates/user/settings/security/twofa.tmpl	2022-10-02 12:34:34.594967988 +0200
+@@ -3,24 +3,7 @@
+ </h4>
+ <div class="ui attached segment">
+ 	<p>{{.i18n.Tr "settings.twofa_desc"}}</p>
+-	{{if .TOTPEnrolled}}
+-	<p>{{$.i18n.Tr "settings.twofa_is_enrolled" | Str2html }}</p>
+-	<form class="ui form" action="{{AppSubUrl}}/user/settings/security/two_factor/regenerate_scratch" method="post" enctype="multipart/form-data">
+-		{{.CsrfTokenHtml}}
+-		<p>{{.i18n.Tr "settings.regenerate_scratch_token_desc"}}</p>
+-		<button class="ui primary button">{{$.i18n.Tr "settings.twofa_scratch_token_regenerate"}}</button>
+-	</form>
+-	<form class="ui form" action="{{AppSubUrl}}/user/settings/security/two_factor/disable" method="post" enctype="multipart/form-data" id="disable-form">
+-		{{.CsrfTokenHtml}}
+-		<p>{{.i18n.Tr "settings.twofa_disable_note"}}</p>
+-		<div class="ui red button delete-button" data-modal-id="disable-twofa" data-type="form" data-form="#disable-form">{{$.i18n.Tr "settings.twofa_disable"}}</div>
+-	</form>
+-	{{else}}
+-	<p>{{.i18n.Tr "settings.twofa_not_enrolled"}}</p>
+-	<div class="inline field">
+-		<a class="ui green button" href="{{AppSubUrl}}/user/settings/security/two_factor/enroll">{{$.i18n.Tr "settings.twofa_enroll"}}</a>
+-	</div>
+-	{{end}}
++	<p><a class="ui button" href="https://account.omegazero.org/manage/account/2fa/">Two-Factor Authentication Settings</a></p>
+ </div>
+ 
+ <div class="ui small basic delete modal" id="disable-twofa">
+diff -u -r -P repo/templates/user/settings/security/twofa_enroll.tmpl run/custom/templates/user/settings/security/twofa_enroll.tmpl
+--- repo/templates/user/settings/security/twofa_enroll.tmpl	2022-10-02 12:28:48.004112369 +0200
++++ run/custom/templates/user/settings/security/twofa_enroll.tmpl	2022-10-02 12:34:34.598639128 +0200
+@@ -1,29 +1,4 @@
+ {{template "base/head" .}}
+-<div class="page-content user settings twofa">
+-	{{template "user/settings/navbar" .}}
+-	<div class="ui container">
+-		{{template "base/alert" .}}
+-		<h4 class="ui top attached header">
+-			{{.i18n.Tr "settings.twofa_enroll"}}
+-		</h4>
+-		<div class="ui attached segment">
+-			<p>{{.i18n.Tr "settings.scan_this_image"}}</p>
+-			<img src="{{.QrUri}}" alt="{{.TwofaSecret}}">
+-			<p>{{.i18n.Tr "settings.or_enter_secret" .TwofaSecret}}
+-			<p>{{.i18n.Tr "settings.then_enter_passcode"}}
+-			<form class="ui form" action="{{.Link}}" method="post">
+-				{{.CsrfTokenHtml}}
+-				<div class="inline required field {{if .Err_Passcode}}error{{end}}">
+-					<label for="passcode">{{.i18n.Tr "passcode"}}</label>
+-					<input id="passcode" name="passcode" autofocus required>
+-				</div>
+-				<div class="inline field">
+-					<label></label>
+-					<button class="ui green button">{{.i18n.Tr "auth.verify"}}</button>
+-				</div>
+-			</form>
+-		</div>
+-	</div>
+-</div>
++Disabled
+ 
+ {{template "base/footer" .}}
+Only in repo/templates/user/settings/security: webauthn.tmpl
