@@ -71,7 +71,7 @@ diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
 -	<link rel="icon" href="{{AssetUrlPrefix}}/img/favicon.svg" type="image/svg+xml">
 -	<link rel="alternate icon" href="{{AssetUrlPrefix}}/img/favicon.png" type="image/png">
  	<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/index.css?v={{MD5 AppVer}}">
-+	<link rel="icon" href="https://static.omegazero.org/c/git/assets/img/favicon.png" type="image/png">
++	<link rel="icon" href="https://static.omegazero.org/i/w/favicons/git/favicon.png" type="image/png">
  	{{template "base/head_script" .}}
  	<noscript>
  		<style>
@@ -125,7 +125,7 @@ diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
 -	<meta property="og:image" content="{{AssetUrlPrefix}}/img/logo.png">
 -	<meta property="og:url" content="{{AppUrl}}">
 +	<meta property="og:type" content="website" />
-+	<meta property="og:image" content="https://static.omegazero.org/c/git/assets/img/favicon.png" />
++	<meta property="og:image" content="https://static.omegazero.org/i/w/favicons/git/favicon.png" />
 +	<meta property="og:url" content="{{AppUrl}}" />
  	<meta property="og:description" content="{{MetaDescription}}">
  {{end}}
