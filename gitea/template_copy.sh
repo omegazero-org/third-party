@@ -1,5 +1,9 @@
 #!/bin/sh
 
+mkdir -p custom/templates/base
+mkdir -p custom/templates/user/auth
+mkdir -p custom/templates/user/settings/security
+
 cp ../repo/templates/base/footer_content.tmpl custom/templates/base/footer_content.tmpl
 cp ../repo/templates/base/head.tmpl custom/templates/base/head.tmpl
 cp ../repo/templates/base/head_navbar.tmpl custom/templates/base/head_navbar.tmpl
