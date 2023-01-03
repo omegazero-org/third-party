@@ -15,13 +15,13 @@
 	}
 
 	function addLinks(data){
-		let path = window.location.pathname;
-		let mirrors = data[window.location.pathname.substring(1)];
+		let path = window.location.pathname.split("/");
+		let mirrors = data[path[1] + "/" + path[2]];
 		if(mirrors){
-			let repoHeader = document.querySelector("div.page-content.repository div.ui.container div.secondary.menu");
+			let repoHeader = document.querySelector("div.page-content.repository div.ui.container div.repo-button-row");
 			if(!repoHeader)
 				return;
-			addRepoLink(repoHeader, mirrors);
+			addRepoLink(repoHeader, mirrors, path.slice(3, 6), path.slice(6).join("/"));
 		}else{
 			let listItems = document.querySelectorAll("div.repository.list div.item");
 			for(let item of listItems){
@@ -52,19 +52,29 @@
 		descEl.prepend(linkContainer);
 	}
 
-	function addRepoLink(headerEl, mirrors){
+	function addRepoLink(headerEl, mirrors, sub, path){
 		let buttonsWrapEl = document.createElement("div");
-		buttonsWrapEl.classList = "fitted item mx-0";
-		let buttonsEl = document.createElement("div");
-		buttonsEl.classList = "ui tiny primary buttons";
+		buttonsWrapEl.classList = "df ac";
 		for(let mirrorType in mirrors){
 			let text = mirrorTypeText[mirrorType];
 			if(!text)
 				continue;
-			buttonsEl.innerHTML += '<a class="ui button" href="' + mirrors[mirrorType] + '">' + text + '</a>';
+			let href = mirrors[mirrorType];
+			if(sub && sub[0] == "src"){
+				if(!href.endsWith("/"))
+					href += "/";
+				if(mirrorType == "omz-source"){
+					if(sub[2] != "master")
+						continue;
+					href += path;
+				}else if(mirrorType == "github"){
+					href += "tree/" + sub[2] + "/" + path;
+				}else
+					href += sub + "/" + path;
+			}
+			buttonsWrapEl.innerHTML += '<a class="ui compact basic button" href="' + href + '">' + text + '</a>';
 		}
-		buttonsWrapEl.append(buttonsEl);
-		headerEl.insertBefore(buttonsWrapEl, headerEl.childNodes[6]);
+		headerEl.insertBefore(buttonsWrapEl, headerEl.childNodes[2]);
 	}
 
 	window.addEventListener("DOMContentLoaded", init);

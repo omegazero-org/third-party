@@ -146,7 +146,7 @@ a:hover{
 	border: none;
 }
 
-.tag-code, .tag-code td{
+.tag-code, .tag-code td, .tag-code .blob-excerpt{
 	background: var(--color-secondary) !important;
 }
 
