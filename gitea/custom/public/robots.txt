@@ -4,7 +4,6 @@ User-agent: *
 Disallow: /api/*
 
 Disallow: /*/activity
-Disallow: /*/wiki
 Disallow: /*/issues
 Disallow: /*/pulls
 Disallow: /*/milestones
@@ -18,7 +17,7 @@ Disallow: /*/tags
 Disallow: /*/labels
 Disallow: /*/contributors
 Disallow: /*/comments
-Disallow: /*/refs/*
+Disallow: /*/refs/
 Disallow: /*/star
 Disallow: /*/watch
 Disallow: /*/archive/
@@ -31,12 +30,12 @@ Disallow: /*/cache/
 Disallow: /*/commit/
 Disallow: /*/commits/
 Disallow: /*/src/
+Disallow: /*/find/
+Disallow: /*/search
 
 Disallow: /.git/
 Disallow: */.git/
 Disallow: /*.git$
-Disallow: /search
-Disallow: */search
 
 Disallow: /avatars/
 Disallow: /user/
