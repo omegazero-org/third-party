@@ -465,3 +465,10 @@ a.ui.basic.green.label:hover{
 .chroma .w{
 	color:#bbb
 }
+
+
+@media only screen and (min-width: 400px){
+	body {
+		overflow-x: hidden;
+	}
+}

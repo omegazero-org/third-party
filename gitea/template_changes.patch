@@ -6,12 +6,12 @@ Only in repo/templates/base: delete_modal_actions.tmpl
 Only in repo/templates/base: disable_form_autofill.tmpl
 Only in repo/templates/base: footer.tmpl
 diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/footer_content.tmpl
---- repo/templates/base/footer_content.tmpl	2023-01-02 13:52:14.318001065 +0100
-+++ run/custom/templates/base/footer_content.tmpl	2023-01-02 14:51:00.202102118 +0100
+--- repo/templates/base/footer_content.tmpl	2023-04-04 21:20:51.075983688 +0200
++++ run/custom/templates/base/footer_content.tmpl	2023-04-04 22:17:33.594290515 +0200
 @@ -1,19 +1,9 @@
- <footer>
+ <footer role="group" aria-label="{{.locale.Tr "aria.footer"}}">
  	<div class="ui container">
- 		<div class="ui left">
+ 		<div class="ui left" role="contentinfo" aria-label="{{.locale.Tr "aria.footer.software"}}">
 -			<a target="_blank" rel="noopener noreferrer" href="https://gitea.io">{{.locale.Tr "powered_by" "Gitea"}}</a>
 -			{{if (or .ShowFooterVersion .PageIsAdmin)}}
 -				{{.locale.Tr "version"}}:
@@ -29,7 +29,7 @@ diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/
 +			 <span class="version">{{GoVer}}</span>, FreeBSD{{end}}{{if ShowFooterTemplateLoadTime}}, {{.locale.Tr "page"}}:
 +			 <strong>{{LoadTimes .PageStartTime}}</strong> {{.locale.Tr "template"}}:{{if .TemplateName}} {{.TemplateName}}{{end}} <strong>{{call .TemplateLoadTimes}}</strong>{{end}}
  		</div>
- 		<div class="ui right links">
+ 		<div class="ui right links" role="group" aria-label="{{.locale.Tr "aria.footer.links"}}">
  			{{if .ShowFooterBranding}}
 @@ -28,8 +18,10 @@
  					{{end}}
@@ -43,25 +43,13 @@ diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/
  		</div>
  	</div>
 diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
---- repo/templates/base/head.tmpl	2023-01-02 13:52:14.321576145 +0100
-+++ run/custom/templates/base/head.tmpl	2023-01-02 14:49:01.509554725 +0100
-@@ -4,13 +4,13 @@
- 	<meta charset="utf-8">
- 	<meta name="viewport" content="width=device-width, initial-scale=1">
- 	<title>{{if .Title}}{{.Title | RenderEmojiPlain}} - {{end}}{{if .Repository.Name}}{{.Repository.Name}} - {{end}}{{AppName}}</title>
--	<link rel="manifest" href="data:{{.ManifestData}}">
--	<meta name="theme-color" content="{{ThemeColorMetaTag}}">
--	<meta name="default-theme" content="{{DefaultTheme}}">
--	<meta name="author" content="{{if .Repository}}{{.Owner.Name}}{{else}}{{MetaAuthor}}{{end}}">
--	<meta name="description" content="{{if .Repository}}{{.Repository.Name}}{{if .Repository.Description}} - {{.Repository.Description}}{{end}}{{else}}{{MetaDescription}}{{end}}">
--	<meta name="keywords" content="{{MetaKeywords}}">
+--- repo/templates/base/head.tmpl	2023-04-04 21:20:51.077507461 +0200
++++ run/custom/templates/base/head.tmpl	2023-04-04 22:20:28.286588495 +0200
+@@ -10,7 +10,7 @@
+ 	<meta name="author" content="{{if .Repository}}{{.Owner.Name}}{{else}}{{MetaAuthor}}{{end}}">
+ 	<meta name="description" content="{{if .Repository}}{{.Repository.Name}}{{if .Repository.Description}} - {{.Repository.Description}}{{end}}{{else}}{{MetaDescription}}{{end}}">
+ 	<meta name="keywords" content="{{MetaKeywords}}">
 -	<meta name="referrer" content="no-referrer">
-+	<link rel="manifest" href="data:{{.ManifestData}}" />
-+	<meta name="theme-color" content="{{ThemeColorMetaTag}}" />
-+	<meta name="default-theme" content="{{DefaultTheme}}" />
-+	<meta name="author" content="{{if .Repository}}{{.Owner.Name}}{{else}}{{MetaAuthor}}{{end}}" />
-+	<meta name="description" content="{{if .Repository}}{{.Repository.Name}}{{if .Repository.Description}} - {{.Repository.Description}}{{end}}{{else}}{{MetaDescription}}{{end}}" />
-+	<meta name="keywords" content="{{MetaKeywords}}" />
 +	<meta name="referrer" content="strict-origin" />
  {{if .GoGetImport}}
  	<meta name="go-import" content="{{.GoGetImport}} git {{.RepoCloneLink.HTTPS}}">
@@ -76,68 +64,15 @@ diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
  	<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/index.css?v={{AssetVersion}}">
  	{{template "base/head_script" .}}
  	<noscript>
-@@ -30,41 +29,41 @@
- 		</style>
- 	</noscript>
- {{if .PageIsUserProfile}}
--	<meta property="og:title" content="{{.Owner.DisplayName}}">
--	<meta property="og:type" content="profile">
--	<meta property="og:image" content="{{.Owner.AvatarLink}}">
--	<meta property="og:url" content="{{.Owner.HTMLURL}}">
-+	<meta property="og:title" content="{{.Owner.DisplayName}}" />
-+	<meta property="og:type" content="profile" />
-+	<meta property="og:image" content="{{.Owner.AvatarLink}}" />
-+	<meta property="og:url" content="{{.Owner.HTMLURL}}" />
- 	{{if .Owner.Description}}
--		<meta property="og:description" content="{{.Owner.Description}}">
-+		<meta property="og:description" content="{{.Owner.Description}}" />
- 	{{end}}
- {{else if .Repository}}
- 	{{if .Issue}}
--		<meta property="og:title" content="{{.Issue.Title}}">
--		<meta property="og:url" content="{{.Issue.HTMLURL}}">
-+		<meta property="og:title" content="{{.Issue.Title}}" />
-+		<meta property="og:url" content="{{.Issue.HTMLURL}}" />
- 		{{if .Issue.Content}}
--			<meta property="og:description" content="{{.Issue.Content}}">
-+			<meta property="og:description" content="{{.Issue.Content}}" />
- 		{{end}}
- 	{{else}}
--		<meta property="og:title" content="{{.Repository.Name}}">
--		<meta property="og:url" content="{{.Repository.HTMLURL}}">
-+		<meta property="og:title" content="{{.Repository.Name}}" />
-+		<meta property="og:url" content="{{.Repository.HTMLURL}}" />
- 		{{if .Repository.Description}}
--			<meta property="og:description" content="{{.Repository.Description}}">
-+			<meta property="og:description" content="{{.Repository.Description}}" />
- 		{{end}}
- 	{{end}}
--	<meta property="og:type" content="object">
-+	<meta property="og:type" content="object" />
- 	{{if .Repository.AvatarLink}}
--		<meta property="og:image" content="{{.Repository.AvatarLink}}">
-+		<meta property="og:image" content="{{.Repository.AvatarLink}}" />
- 	{{else}}
--		<meta property="og:image" content="{{.Repository.Owner.AvatarLink}}">
-+		<meta property="og:image" content="{{.Repository.Owner.AvatarLink}}" />
- 	{{end}}
+@@ -60,7 +59,7 @@
  {{else}}
--	<meta property="og:title" content="{{AppName}}">
--	<meta property="og:type" content="website">
+ 	<meta property="og:title" content="{{AppName}}">
+ 	<meta property="og:type" content="website">
 -	<meta property="og:image" content="{{AssetUrlPrefix}}/img/logo.png">
--	<meta property="og:url" content="{{AppUrl}}">
--	<meta property="og:description" content="{{MetaDescription}}">
-+	<meta property="og:title" content="{{AppName}}" />
-+	<meta property="og:type" content="website" />
 +	<meta property="og:image" content="https://static.omegazero.org/i/w/favicons/git/favicon.png" />
-+	<meta property="og:url" content="{{AppUrl}}" />
-+	<meta property="og:description" content="{{MetaDescription}}" />
+ 	<meta property="og:url" content="{{AppUrl}}">
+ 	<meta property="og:description" content="{{MetaDescription}}">
  {{end}}
--<meta property="og:site_name" content="{{AppName}}">
-+<meta property="og:site_name" content="{{AppName}}" />
- {{if .IsSigned}}
- 	{{if ne .SignedUser.Theme "gitea"}}
- 		<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/theme-{{.SignedUser.Theme | PathEscape}}.css?v={{AssetVersion}}">
 @@ -73,6 +72,7 @@
  	<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/theme-{{DefaultTheme | PathEscape}}.css?v={{AssetVersion}}">
  {{end}}
@@ -147,25 +82,36 @@ diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
  <body>
  	{{template "custom/body_outer_pre" .}}
 diff -u -r -P repo/templates/base/head_navbar.tmpl run/custom/templates/base/head_navbar.tmpl
---- repo/templates/base/head_navbar.tmpl	2023-01-02 13:52:14.324067926 +0100
-+++ run/custom/templates/base/head_navbar.tmpl	2023-01-02 14:46:59.476577507 +0100
+--- repo/templates/base/head_navbar.tmpl	2023-04-04 21:20:51.081350393 +0200
++++ run/custom/templates/base/head_navbar.tmpl	2023-04-04 22:23:09.674333577 +0200
 @@ -5,7 +5,7 @@
  	{{end}}
- 	<div class="item brand" style="justify-content: space-between;">
+ 	<div class="item brand gt-sb">
  		<a href="{{AppSubUrl}}/" aria-label="{{if .IsSigned}}{{.locale.Tr "dashboard"}}{{else}}{{.locale.Tr "home"}}{{end}}">
 -			<img width="30" height="30" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{.locale.Tr "logo"}}" aria-hidden="true">
 +			<img class="ui mini image" width="30" height="30" src="https://static.omegazero.org/p/w/icon_transparent.png" alt="{{.locale.Tr "logo"}}" aria-hidden="true">
  		</a>
- 		{{if .IsSigned}}
- 		<a href="{{AppSubUrl}}/notifications" class="tooltip mobile-only" data-content='{{.locale.Tr "notifications"}}'>
-@@ -193,15 +193,14 @@
+ 		<div class="gt-df gt-ac">
+ 			{{if .IsSigned}}
+@@ -181,10 +181,6 @@
+ 						{{svg "octicon-tools"}}
+ 						{{.locale.Tr "your_settings"}}<!-- Your settings -->
+ 					</a>
+-					<a class="item" target="_blank" rel="noopener noreferrer" href="https://docs.gitea.io">
+-						{{svg "octicon-question"}}
+-						{{.locale.Tr "help"}}<!-- Help -->
+-					</a>
+ 					{{if .IsAdmin}}
+ 						<div class="divider"></div>
+ 
+@@ -195,15 +191,14 @@
  					{{end}}
  
  					<div class="divider"></div>
 -					<a class="item link-action" href data-url="{{AppSubUrl}}/user/logout" data-redirect="{{AppSubUrl}}/">
 +					<a class="item" href="https://account.omegazero.org/logout/?flcid=00000000787fb10844c46d3a5024f40c">
  						{{svg "octicon-sign-out"}}
--						{{.locale.Tr "sign_out"}}<!-- Sign Out -->
+-						{{.locale.Tr "sign_out"}}
 +						SSO Logout
  					</a>
  				</div><!-- end content avatar menu -->
@@ -182,14 +128,14 @@ Only in repo/templates: code
 Only in repo/templates: custom
 Only in repo/templates: explore
 diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
---- repo/templates/home.tmpl	2023-01-02 13:52:14.354395309 +0100
-+++ run/custom/templates/home.tmpl	2023-01-02 14:51:39.398489434 +0100
+--- repo/templates/home.tmpl	2023-04-04 21:20:51.107254485 +0200
++++ run/custom/templates/home.tmpl	2023-04-04 22:27:21.350290609 +0200
 @@ -2,51 +2,28 @@
- <div class="page-content home">
+ <div role="main" aria-label="{{if .IsSigned}}{{.locale.Tr "dashboard"}}{{else}}{{.locale.Tr "home"}}{{end}}" class="page-content home">
  	<div class="ui stackable middle very relaxed page grid">
  		<div class="sixteen wide center aligned centered column">
 -			<div>
--				<img class="logo" width="220" height="220" src="{{AssetUrlPrefix}}/img/logo.svg"/>
+-				<img class="logo" width="220" height="220" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{.locale.Tr "logo"}}"/>
 +			<div style="margin-bottom: 20px;">
 +				<img class="logo" width="64" height="64" src="https://static.omegazero.org/p/w/icon_transparent.png"/>
  			</div>
@@ -259,11 +205,13 @@ Only in repo/templates: mail
 Only in repo/templates: org
 Only in repo/templates: package
 Only in repo/templates: post-install.tmpl
+Only in repo/templates: projects
 Only in repo/templates: repo
 Only in repo/templates: shared
 Only in repo/templates: status
 Only in repo/templates: swagger
 Only in repo/templates/user/auth: activate.tmpl
+Only in repo/templates/user/auth: captcha.tmpl
 Only in repo/templates/user/auth: change_passwd.tmpl
 Only in repo/templates/user/auth: change_passwd_inner.tmpl
 Only in repo/templates/user/auth: finalize_openid.tmpl
@@ -271,8 +219,8 @@ Only in repo/templates/user/auth: forgot_passwd.tmpl
 Only in repo/templates/user/auth: grant.tmpl
 Only in repo/templates/user/auth: grant_error.tmpl
 diff -u -r -P repo/templates/user/auth/link_account.tmpl run/custom/templates/user/auth/link_account.tmpl
---- repo/templates/user/auth/link_account.tmpl	2023-01-02 13:52:14.961531030 +0100
-+++ run/custom/templates/user/auth/link_account.tmpl	2023-01-02 14:45:21.834941348 +0100
+--- repo/templates/user/auth/link_account.tmpl	2023-04-04 21:20:51.603973580 +0200
++++ run/custom/templates/user/auth/link_account.tmpl	2023-04-04 21:50:23.979611495 +0200
 @@ -4,28 +4,18 @@
  		<div class="new-menu-inner">
  			<!-- TODO handle .ShowRegistrationButton once other login bugs are fixed -->
@@ -309,9 +257,9 @@ Only in repo/templates/user/auth: prohibit_login.tmpl
 Only in repo/templates/user/auth: reset_passwd.tmpl
 Only in repo/templates/user/auth: signin.tmpl
 diff -u -r -P repo/templates/user/auth/signin_inner.tmpl run/custom/templates/user/auth/signin_inner.tmpl
---- repo/templates/user/auth/signin_inner.tmpl	2023-01-02 13:52:14.969555443 +0100
-+++ run/custom/templates/user/auth/signin_inner.tmpl	2023-01-02 14:44:33.276432307 +0100
-@@ -11,66 +11,17 @@
+--- repo/templates/user/auth/signin_inner.tmpl	2023-04-04 21:20:51.611966544 +0200
++++ run/custom/templates/user/auth/signin_inner.tmpl	2023-04-04 22:24:38.291160181 +0200
+@@ -11,68 +11,16 @@
  		<div class="ui attached segment">
  			<form class="ui form" action="{{.SignInLink}}" method="post">
  			{{.CsrfTokenHtml}}
@@ -334,7 +282,9 @@ diff -u -r -P repo/templates/user/auth/signin_inner.tmpl run/custom/templates/us
 -				</div>
 -			</div>
 -			{{end}}
- 
+-
+-			{{template "user/auth/captcha" .}}
+-
 -			<div class="inline field">
 -				<label></label>
 -				<button class="ui green button">
@@ -401,8 +351,8 @@ Only in repo/templates/user: overview
 Only in repo/templates/user: profile.tmpl
 Only in repo/templates/user: project.tmpl
 diff -u -r -P repo/templates/user/settings/account.tmpl run/custom/templates/user/settings/account.tmpl
---- repo/templates/user/settings/account.tmpl	2023-01-02 13:52:15.034994006 +0100
-+++ run/custom/templates/user/settings/account.tmpl	2023-01-02 14:41:41.797765924 +0100
+--- repo/templates/user/settings/account.tmpl	2023-04-04 21:20:51.665388673 +0200
++++ run/custom/templates/user/settings/account.tmpl	2023-04-04 21:50:24.001613695 +0200
 @@ -7,35 +7,7 @@
  			{{.locale.Tr "settings.password"}}
  		</h4>
@@ -444,7 +394,7 @@ Only in repo/templates/user/settings: appearance.tmpl
 Only in repo/templates/user/settings: applications.tmpl
 diff -u -r -P repo/templates/user/settings/applications_oauth2.tmpl run/custom/templates/user/settings/applications_oauth2.tmpl
 --- repo/templates/user/settings/applications_oauth2.tmpl	2023-01-02 13:52:15.042290282 +0100
-+++ run/custom/templates/user/settings/applications_oauth2.tmpl	2023-01-02 14:41:07.871801569 +0100
++++ run/custom/templates/user/settings/applications_oauth2.tmpl	2023-04-04 21:50:24.012815963 +0200
 @@ -1,6 +1,11 @@
 +
 +{{if .IsAdmin}}
@@ -467,16 +417,19 @@ Only in repo/templates/user/settings: keys_principal.tmpl
 Only in repo/templates/user/settings: keys_ssh.tmpl
 Only in repo/templates/user/settings: navbar.tmpl
 Only in repo/templates/user/settings: organization.tmpl
+Only in repo/templates/user/settings: packages.tmpl
+Only in repo/templates/user/settings: packages_cleanup_rules_edit.tmpl
+Only in repo/templates/user/settings: packages_cleanup_rules_preview.tmpl
 diff -u -r -P repo/templates/user/settings/profile.tmpl run/custom/templates/user/settings/profile.tmpl
---- repo/templates/user/settings/profile.tmpl	2023-01-02 13:52:15.066579864 +0100
-+++ run/custom/templates/user/settings/profile.tmpl	2023-01-02 14:39:33.539670574 +0100
+--- repo/templates/user/settings/profile.tmpl	2023-04-04 21:20:51.696457091 +0200
++++ run/custom/templates/user/settings/profile.tmpl	2023-04-04 22:25:36.225957024 +0200
 @@ -99,38 +99,8 @@
  			{{.locale.Tr "settings.avatar"}}
  		</h4>
  		<div class="ui attached segment">
 -			<form class="ui form" action="{{.Link}}/avatar" method="post" enctype="multipart/form-data">
 -				{{.CsrfTokenHtml}}
--				{{if not DisableGravatar}}
+-				{{if not (DisableGravatar $.Context)}}
 -				<div class="inline field">
 -					<div class="ui radio checkbox">
 -						<input name="source" value="lookup" type="radio" {{if not .SignedUser.UseCustomAvatar}}checked{{end}}>
@@ -512,9 +465,10 @@ diff -u -r -P repo/templates/user/settings/profile.tmpl run/custom/templates/use
  	</div>
  </div>
 Only in repo/templates/user/settings: repos.tmpl
+Only in repo/templates/user/settings: secrets.tmpl
 diff -u -r -P repo/templates/user/settings/security/accountlinks.tmpl run/custom/templates/user/settings/security/accountlinks.tmpl
 --- repo/templates/user/settings/security/accountlinks.tmpl	2023-01-02 13:52:15.071591410 +0100
-+++ run/custom/templates/user/settings/security/accountlinks.tmpl	2023-01-02 14:43:43.571384208 +0100
++++ run/custom/templates/user/settings/security/accountlinks.tmpl	2023-04-04 21:50:24.035342224 +0200
 @@ -1,21 +1,5 @@
  <h4 class="ui top attached header">
  	{{.locale.Tr "settings.manage_account_links"}}
@@ -567,8 +521,8 @@ diff -u -r -P repo/templates/user/settings/security/accountlinks.tmpl run/custom
  </div>
 Only in repo/templates/user/settings/security: openid.tmpl
 diff -u -r -P repo/templates/user/settings/security/security.tmpl run/custom/templates/user/settings/security/security.tmpl
---- repo/templates/user/settings/security/security.tmpl	2022-10-02 12:28:47.996204637 +0200
-+++ run/custom/templates/user/settings/security/security.tmpl	2023-01-02 14:42:23.299360583 +0100
+--- repo/templates/user/settings/security/security.tmpl	2023-04-04 21:20:51.700743675 +0200
++++ run/custom/templates/user/settings/security/security.tmpl	2023-04-04 21:50:24.046756860 +0200
 @@ -4,7 +4,6 @@
  	<div class="ui container">
  		{{template "base/alert" .}}
@@ -579,7 +533,7 @@ diff -u -r -P repo/templates/user/settings/security/security.tmpl run/custom/tem
  		{{template "user/settings/security/openid" .}}
 diff -u -r -P repo/templates/user/settings/security/twofa.tmpl run/custom/templates/user/settings/security/twofa.tmpl
 --- repo/templates/user/settings/security/twofa.tmpl	2023-01-02 13:52:15.077344374 +0100
-+++ run/custom/templates/user/settings/security/twofa.tmpl	2023-01-02 14:42:10.443052669 +0100
++++ run/custom/templates/user/settings/security/twofa.tmpl	2023-04-04 21:50:24.057803498 +0200
 @@ -3,24 +3,7 @@
  </h4>
  <div class="ui attached segment">
@@ -607,11 +561,11 @@ diff -u -r -P repo/templates/user/settings/security/twofa.tmpl run/custom/templa
  
  <div class="ui small basic delete modal" id="disable-twofa">
 diff -u -r -P repo/templates/user/settings/security/twofa_enroll.tmpl run/custom/templates/user/settings/security/twofa_enroll.tmpl
---- repo/templates/user/settings/security/twofa_enroll.tmpl	2023-01-02 13:52:15.079667966 +0100
-+++ run/custom/templates/user/settings/security/twofa_enroll.tmpl	2023-01-02 14:41:54.076085443 +0100
+--- repo/templates/user/settings/security/twofa_enroll.tmpl	2023-04-04 21:20:51.703710547 +0200
++++ run/custom/templates/user/settings/security/twofa_enroll.tmpl	2023-04-04 22:24:58.780600780 +0200
 @@ -1,29 +1,4 @@
  {{template "base/head" .}}
--<div class="page-content user settings twofa">
+-<div role="main" aria-label="{{.Title}}" class="page-content user settings twofa">
 -	{{template "user/settings/navbar" .}}
 -	<div class="ui container">
 -		{{template "base/alert" .}}
