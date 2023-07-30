@@ -177,6 +177,10 @@ a:hover{
 	color: var(--color-primary);
 }
 
+#readme_profile {
+	padding: 1em 2em;
+}
+
 
 
 .ui.search>.results{
