@@ -126,6 +126,9 @@
 	--color-caret: var(--color-text);
 	--color-reaction-bg: #ffffff12;
 	--color-reaction-active-bg: var(--color-primary-alpha-40);
+	--color-nav-bg: #000;
+	--color-nav-hover-bg: #ffffff20;
+	--color-label-text: #d0d0d0;
 }
 
 .repository.file.list #repo-files-table tr:hover{
