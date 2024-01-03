@@ -1,7 +1,7 @@
 
 User-agent: *
 
-Disallow: /api/*
+Disallow: /api/
 
 Disallow: /*/activity
 Disallow: /*/issues
@@ -30,12 +30,12 @@ Disallow: /*/cache/
 Disallow: /*/commit/
 Disallow: /*/commits/
 Disallow: /*/src/
-Disallow: /*/find/
-Disallow: /*/search
 
 Disallow: /.git/
 Disallow: */.git/
 Disallow: /*.git$
+Disallow: /search
+Disallow: */search
 
 Disallow: /avatars/
 Disallow: /user/
