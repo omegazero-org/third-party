@@ -29,8 +29,8 @@ class LoginOmzssoPlugin extends \RainLoop\Plugins\AbstractPlugin {
 
 		$this->addPartHook("OAuthEndpoint", "oauthEndpoint");
 
-		$this->replaceTemplate("Login.html");
-		$this->replaceTemplate("AdminLogin.html", true);
+		$this->addTemplate("Login.html");
+		$this->addTemplate("AdminLogin.html", true);
 
 		$this->addHook("filter.send-message", "sendMessageHook");
 
@@ -99,7 +99,7 @@ class LoginOmzssoPlugin extends \RainLoop\Plugins\AbstractPlugin {
 		curl_setopt_array($accountsReq, array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_SSL_VERIFYPEER => true,
-			CURLOPT_URL => "http://tomee.webservices.vm.internal/manager.highperformancewebhosting.com/api/mail/webmaillogin?secret=" . $this->Config()->Get("plugin", "hpwh_mgr_secret", "")
+			CURLOPT_URL => "http://tomee.web.services.vm.internal/manager.highperformancewebhosting.com/api/mail/webmaillogin?secret=" . $this->Config()->Get("plugin", "hpwh_mgr_secret", "")
 					. "&ownerId=" . $userinfo["result"]["sub"]
 		));
 		$accountsRes = curl_exec($accountsReq);
