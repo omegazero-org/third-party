@@ -23,9 +23,11 @@
 				return;
 			addRepoLink(repoHeader, mirrors, path.slice(3, 6), path.slice(6).join("/"));
 		}else{
-			let listItems = document.querySelectorAll("div.repository.list div.item");
+			let listItems = document.querySelectorAll("div.repositories.explore div.flex-item");
+				console.log(listItems);
 			for(let item of listItems){
-				let name = item.querySelector("div.header div.repo-title a").getAttribute("href").substring(1);
+				let name = item.querySelector("div.flex-item-title a.name").getAttribute("href").substring(1);
+				console.log(name);
 				let mirrors = data[name];
 				if(!mirrors)
 					continue;
@@ -35,21 +37,21 @@
 	}
 
 	function addExploreLink(item, mirrors){
-		let descEl = item.querySelector("div.description");
-		descEl.childNodes[1].style.display = "inline-block";
-		descEl.insertBefore(document.createElement("br"), descEl.childNodes[3]);
+		let descEl = item.querySelector("div.flex-item-title");
+		//descEl.childNodes[1].style.display = "inline-block";
+		//descEl.insertBefore(document.createElement("br"), descEl.childNodes[3]);
 		let linkContainer = document.createElement("div");
-		linkContainer.style.float = "right";
-		linkContainer.style["text-align"] = "right";
+		//linkContainer.style.float = "right";
+		//linkContainer.style["text-align"] = "right";
 		let mcHtml = "";
 		for(let mirrorType in mirrors){
 			let text = mirrorTypeText[mirrorType];
 			if(!text)
 				continue;
-			mcHtml += '<a class="ui primary button" style="display: inline-block;padding: 5px;margin: 2.5px;" href="' + mirrors[mirrorType] + '">' + text + '</a>';
+			mcHtml += '<a class="ui button" style="display: inline-block;padding: 2px;font-size: small;" href="' + mirrors[mirrorType] + '">' + text + '</a>';
 		}
 		linkContainer.innerHTML = mcHtml;
-		descEl.prepend(linkContainer);
+		descEl.append(linkContainer);
 	}
 
 	function addRepoLink(headerEl, mirrors, sub, path){
