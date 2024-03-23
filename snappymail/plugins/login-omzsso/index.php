@@ -119,10 +119,14 @@ class LoginOmzssoPlugin extends \RainLoop\Plugins\AbstractPlugin {
 			$email = $account["email"];
 			$password = $account["webmailToken"] ?? "--NOPW--";
 			if($mainAccount != null){
-				$addAccount = \RainLoop\Model\AdditionalAccount::NewInstanceFromCredentials($actions, $email, $email, $password, true);
+				$addAccount = \RainLoop\Model\AdditionalAccount::NewInstanceFromCredentials($actions, $email, $email, new \SnappyMail\SensitiveString($password));
+				if(!$addAccount)
+					return "Account model creation failed";
 				$additionalAccounts[$email] = $addAccount->asTokenArray($mainAccount);
 			}else{
-				$mainAccount = \RainLoop\Model\MainAccount::NewInstanceFromCredentials($actions, $email, $email, $password, true);
+				$mainAccount = \RainLoop\Model\MainAccount::NewInstanceFromCredentials($actions, $email, $email, new \SnappyMail\SensitiveString($password));
+				if(!$mainAccount)
+					return "Account model creation failed";
 			}
 		}
 		if(!$mainAccount)
