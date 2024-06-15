@@ -1,0 +1,17 @@
+
+
+insert at ./w\vendor\wikimedia\ip-utils\src\IPUtils.php:796
+
+		$addr = explode("]", explode("[", $addr, 2)[1] ?? "", 2)[0];
+		if ( self::isValidIPv6( $addr ) ) {
+			return $addr;
+		}
+
+
+
+insert at ./w\extensions\PluggableAuth\includes\PluggableAuthLogin.php:150
+
+		if(!$returnToUrl)
+			$returnToUrl = "/";
+
+
