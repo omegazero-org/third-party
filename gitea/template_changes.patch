@@ -6,7 +6,7 @@ Only in repo/templates/base: disable_form_autofill.tmpl
 Only in repo/templates/base: footer.tmpl
 diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/footer_content.tmpl
 --- repo/templates/base/footer_content.tmpl	2024-01-03 12:50:23.879905427 +0100
-+++ run/custom/templates/base/footer_content.tmpl	2024-01-03 16:01:02.685543893 +0100
++++ run/custom/templates/base/footer_content.tmpl	2024-05-22 22:30:34.626955375 +0200
 @@ -1,18 +1,7 @@
  <footer class="page-footer" role="group" aria-label="{{ctx.Locale.Tr "aria.footer"}}">
  	<div class="left-links" role="contentinfo" aria-label="{{ctx.Locale.Tr "aria.footer.software"}}">
@@ -32,7 +32,7 @@ diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/
  				{{end}}
  			</div>
  		</div>
-+		<a target="_blank" rel="noopener noreferrer" href="https://omegazero.org/">omegazero.org</a>
++		<a target="_blank" rel="noopener noreferrer" href="https://warpcs.org/">warp CS</a>
  		<a href="{{AssetUrlPrefix}}/licenses.txt">{{ctx.Locale.Tr "licenses"}}</a>
  		{{if .EnableSwagger}}<a href="{{AppSubUrl}}/api/swagger">API</a>{{end}}
 +		<a target="_blank" rel="noopener noreferrer" href="https://gitea.io">Gitea Website</a>
@@ -41,7 +41,7 @@ diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/
  </footer>
 diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
 --- repo/templates/base/head.tmpl	2024-01-03 12:50:23.883464039 +0100
-+++ run/custom/templates/base/head.tmpl	2024-01-03 15:49:15.259915030 +0100
++++ run/custom/templates/base/head.tmpl	2024-05-22 22:30:42.460254679 +0200
 @@ -7,7 +7,7 @@
  	<meta name="author" content="{{if .Repository}}{{.Owner.Name}}{{else}}{{MetaAuthor}}{{end}}">
  	<meta name="description" content="{{if .Repository}}{{.Repository.Name}}{{if .Repository.Description}} - {{.Repository.Description}}{{end}}{{else}}{{MetaDescription}}{{end}}">
@@ -57,7 +57,7 @@ diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
  {{end}}
 -	<link rel="icon" href="{{AssetUrlPrefix}}/img/favicon.svg" type="image/svg+xml">
 -	<link rel="alternate icon" href="{{AssetUrlPrefix}}/img/favicon.png" type="image/png">
-+	<link rel="icon" href="https://static.omegazero.org/i/w/favicons/git/favicon.png" type="image/png">
++	<link rel="icon" href="https://static.warpcs.org/i/w/favicons/git/favicon.png" type="image/png">
  	{{template "base/head_script" .}}
  	<noscript>
  		<style>
@@ -71,13 +71,13 @@ diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
  	{{ctx.DataRaceCheck $.Context}}
 diff -u -r -P repo/templates/base/head_navbar.tmpl run/custom/templates/base/head_navbar.tmpl
 --- repo/templates/base/head_navbar.tmpl	2024-01-03 12:50:23.885307604 +0100
-+++ run/custom/templates/base/head_navbar.tmpl	2024-01-03 16:01:13.205096719 +0100
++++ run/custom/templates/base/head_navbar.tmpl	2024-05-22 22:31:03.237834407 +0200
 @@ -7,7 +7,7 @@
  	<div class="navbar-left ui secondary menu">
  		<!-- the logo -->
  		<a class="item" id="navbar-logo" href="{{AppSubUrl}}/" aria-label="{{if .IsSigned}}{{ctx.Locale.Tr "dashboard"}}{{else}}{{ctx.Locale.Tr "home"}}{{end}}">
 -			<img width="30" height="30" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{ctx.Locale.Tr "logo"}}" aria-hidden="true">
-+			<img width="30" height="30" src="https://static.omegazero.org/p/w/icon_transparent.png" alt="{{ctx.Locale.Tr "logo"}}" aria-hidden="true">
++			<img width="30" height="30" src="https://static.warpcs.org/i/w/logo_full_sq.png" alt="{{ctx.Locale.Tr "logo"}}" aria-hidden="true">
  		</a>
  
  		<!-- mobile right menu, it must be here because in mobile view, each item is a flex column, the first item is a full row column -->
@@ -108,7 +108,7 @@ diff -u -r -P repo/templates/base/head_navbar.tmpl run/custom/templates/base/hea
  
  					<div class="divider"></div>
 -					<a class="item link-action" href data-url="{{AppSubUrl}}/user/logout">
-+					<a class="item" href="https://account.omegazero.org/logout/?flcid=00000000787fb10844c46d3a5024f40c">
++					<a class="item" href="https://idp.warpcs.org/logout/?flcid=00000000787fb10844c46d3a5024f40c">
  						{{svg "octicon-sign-out"}}
 -						{{ctx.Locale.Tr "sign_out"}}
 +						SSO Logout
@@ -126,7 +126,7 @@ Only in repo/templates: devtest
 Only in repo/templates: explore
 diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
 --- repo/templates/home.tmpl	2024-01-03 12:50:23.925922540 +0100
-+++ run/custom/templates/home.tmpl	2024-01-03 15:57:34.491511228 +0100
++++ run/custom/templates/home.tmpl	2024-05-22 22:33:32.289752874 +0200
 @@ -1,51 +1,27 @@
  {{template "base/head" .}}
  <div role="main" aria-label="{{if .IsSigned}}{{ctx.Locale.Tr "dashboard"}}{{else}}{{ctx.Locale.Tr "home"}}{{end}}" class="page-content home">
@@ -140,7 +140,7 @@ diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
 -				<h2>{{ctx.Locale.Tr "startpage.app_desc"}}</h2>
 -			</div>
 +		<div class="center" style="margin-bottom: 20px;">
-+			<img class="logo" width="64" height="64" src="https://static.omegazero.org/p/w/icon_transparent.png"/>
++			<img class="logo" width="64" src="https://static.warpcs.org/i/w/logo_full.png"/>
  		</div>
  	</div>
 -	<div class="ui stackable middle very relaxed page grid">
@@ -181,18 +181,18 @@ diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
 -	</div>
 +	<div class="ui stackable middle page grid">
 +		<div class="eight wide aligned centered column">
-+			This is the main <i>omegazero.org</i> git server which hosts most of our open source code and is also available for use by other individuals. There are a few more open source applications which do not use version control and are only available at <a href="https://source.omegazero.org/">source.omegazero.org</a>.
++			This is the main <i>warp CS</i> git server which hosts most of our open source code and is also available for use by other individuals. There are a few more open source applications which do not use version control and are only available at <a href="https://sw.warpcs.org/">sw.warpcs.org</a>.
 + 		</div>
 +		<div class="eight wide aligned centered column">
 +			<ul>
 +				<li class="">
-+					<a href="/omegazero">omegazero source code</a>
++					<a href="/omegazero">warp CS source code</a>
 +				</li>
 +				<li class="">
 +					<a href="/explore/repos">Explore repositories</a>
 +				</li>
 +				<li class="">
-+					<a href="https://source.omegazero.org/">Explore more source code on source.omegazero.org</a>
++					<a href="https://sw.warpcs.org/">Explore more source code on sw.warpcs.org</a>
 +				</li>
 +			</ul>
 + 		</div>
@@ -219,7 +219,7 @@ Only in repo/templates/user/auth: grant.tmpl
 Only in repo/templates/user/auth: grant_error.tmpl
 diff -u -r -P repo/templates/user/auth/link_account.tmpl run/custom/templates/user/auth/link_account.tmpl
 --- repo/templates/user/auth/link_account.tmpl	2024-01-03 12:50:24.443559017 +0100
-+++ run/custom/templates/user/auth/link_account.tmpl	2024-01-03 15:51:19.925258581 +0100
++++ run/custom/templates/user/auth/link_account.tmpl	2024-05-22 22:27:56.483755310 +0200
 @@ -4,28 +4,18 @@
  		<div class="new-menu-inner">
  			<!-- TODO handle .ShowRegistrationButton once other login bugs are fixed -->
@@ -257,7 +257,7 @@ Only in repo/templates/user/auth: reset_passwd.tmpl
 Only in repo/templates/user/auth: signin.tmpl
 diff -u -r -P repo/templates/user/auth/signin_inner.tmpl run/custom/templates/user/auth/signin_inner.tmpl
 --- repo/templates/user/auth/signin_inner.tmpl	2024-01-03 12:50:24.451442697 +0100
-+++ run/custom/templates/user/auth/signin_inner.tmpl	2024-01-03 16:05:19.902654739 +0100
++++ run/custom/templates/user/auth/signin_inner.tmpl	2024-05-22 22:27:56.484773970 +0200
 @@ -11,51 +11,7 @@
  <div class="ui attached segment">
  	<form class="ui form" action="{{.SignInLink}}" method="post">
@@ -336,7 +336,7 @@ Only in repo/templates/user: overview
 Only in repo/templates/user: profile.tmpl
 diff -u -r -P repo/templates/user/settings/account.tmpl run/custom/templates/user/settings/account.tmpl
 --- repo/templates/user/settings/account.tmpl	2024-01-03 12:50:24.499589597 +0100
-+++ run/custom/templates/user/settings/account.tmpl	2024-01-03 15:55:47.635966241 +0100
++++ run/custom/templates/user/settings/account.tmpl	2024-05-22 22:30:15.525643716 +0200
 @@ -4,35 +4,7 @@
  			{{ctx.Locale.Tr "settings.password"}}
  		</h4>
@@ -370,7 +370,7 @@ diff -u -r -P repo/templates/user/settings/account.tmpl run/custom/templates/use
 -				<p class="text left">{{ctx.Locale.Tr "settings.password_change_disabled"}}</p>
 -			</div>
 -			{{end}}
-+			<a class="ui button" href="https://account.omegazero.org/manage/account/password/">Change SSO password</a>
++			<a class="ui button" href="https://idp.warpcs.org/manage/account/password/">Change SSO password</a>
  		</div>
  
  		<h4 class="ui top attached header">
@@ -379,7 +379,7 @@ Only in repo/templates/user/settings: appearance.tmpl
 Only in repo/templates/user/settings: applications.tmpl
 diff -u -r -P repo/templates/user/settings/applications_oauth2.tmpl run/custom/templates/user/settings/applications_oauth2.tmpl
 --- repo/templates/user/settings/applications_oauth2.tmpl	2024-01-03 12:50:24.506934565 +0100
-+++ run/custom/templates/user/settings/applications_oauth2.tmpl	2024-01-03 15:46:01.896845924 +0100
++++ run/custom/templates/user/settings/applications_oauth2.tmpl	2024-05-22 22:27:56.486852808 +0200
 @@ -1,6 +1,11 @@
 +
 +{{if .IsAdmin}}
@@ -411,7 +411,7 @@ Only in repo/templates/user/settings: packages_cleanup_rules_edit.tmpl
 Only in repo/templates/user/settings: packages_cleanup_rules_preview.tmpl
 diff -u -r -P repo/templates/user/settings/profile.tmpl run/custom/templates/user/settings/profile.tmpl
 --- repo/templates/user/settings/profile.tmpl	2024-01-03 12:50:24.527950766 +0100
-+++ run/custom/templates/user/settings/profile.tmpl	2024-01-03 15:56:18.847190842 +0100
++++ run/custom/templates/user/settings/profile.tmpl	2024-05-22 22:30:21.448376801 +0200
 @@ -97,38 +97,8 @@
  			{{ctx.Locale.Tr "settings.avatar"}}
  		</h4>
@@ -448,7 +448,7 @@ diff -u -r -P repo/templates/user/settings/profile.tmpl run/custom/templates/use
 -					<button class="ui red button link-action" data-url="{{.Link}}/avatar/delete">{{ctx.Locale.Tr "settings.delete_current_avatar"}}</button>
 -				</div>
 -			</form>
-+			<a class="ui button" href="https://account.omegazero.org/manage/account/avatar/">Edit avatar</a><br /><br />
++			<a class="ui button" href="https://idp.warpcs.org/manage/account/avatar/">Edit avatar</a><br /><br />
 +			You may need to re-login to see changes.
  		</div>
  	</div>
@@ -457,7 +457,7 @@ Only in repo/templates/user/settings: repos.tmpl
 Only in repo/templates/user/settings: runner_edit.tmpl
 diff -u -r -P repo/templates/user/settings/security/accountlinks.tmpl run/custom/templates/user/settings/security/accountlinks.tmpl
 --- repo/templates/user/settings/security/accountlinks.tmpl	2024-01-03 12:50:24.531325417 +0100
-+++ run/custom/templates/user/settings/security/accountlinks.tmpl	2024-01-03 15:55:03.899927105 +0100
++++ run/custom/templates/user/settings/security/accountlinks.tmpl	2024-05-22 22:27:56.488973969 +0200
 @@ -2,22 +2,6 @@
  {{if or .AccountLinks .OrderedOAuth2Names}}
  <h4 class="ui top attached header">
@@ -508,7 +508,7 @@ diff -u -r -P repo/templates/user/settings/security/accountlinks.tmpl run/custom
 Only in repo/templates/user/settings/security: openid.tmpl
 diff -u -r -P repo/templates/user/settings/security/security.tmpl run/custom/templates/user/settings/security/security.tmpl
 --- repo/templates/user/settings/security/security.tmpl	2023-07-30 12:02:10.175866582 +0200
-+++ run/custom/templates/user/settings/security/security.tmpl	2024-01-03 15:46:45.310659076 +0100
++++ run/custom/templates/user/settings/security/security.tmpl	2024-05-22 22:27:56.489916082 +0200
 @@ -1,7 +1,6 @@
  {{template "user/settings/layout_head" (dict "ctxData" . "pageClass" "user settings security")}}
  	<div class="user-setting-content">
@@ -519,7 +519,7 @@ diff -u -r -P repo/templates/user/settings/security/security.tmpl run/custom/tem
  		{{template "user/settings/security/openid" .}}
 diff -u -r -P repo/templates/user/settings/security/twofa.tmpl run/custom/templates/user/settings/security/twofa.tmpl
 --- repo/templates/user/settings/security/twofa.tmpl	2024-01-03 12:50:24.533362312 +0100
-+++ run/custom/templates/user/settings/security/twofa.tmpl	2024-01-03 15:55:15.269158920 +0100
++++ run/custom/templates/user/settings/security/twofa.tmpl	2024-05-22 22:30:24.359713787 +0200
 @@ -3,33 +3,5 @@
  </h4>
  <div class="ui attached segment">
@@ -553,11 +553,11 @@ diff -u -r -P repo/templates/user/settings/security/twofa.tmpl run/custom/templa
 -		</div>
 -		{{template "base/modal_actions_confirm" .}}
 -	</div>
-+	<p><a class="ui button" href="https://account.omegazero.org/manage/account/2fa/">Two-Factor Authentication Settings</a></p>
++	<p><a class="ui button" href="https://idp.warpcs.org/manage/account/2fa/">Two-Factor Authentication Settings</a></p>
  </div>
 diff -u -r -P repo/templates/user/settings/security/twofa_enroll.tmpl run/custom/templates/user/settings/security/twofa_enroll.tmpl
 --- repo/templates/user/settings/security/twofa_enroll.tmpl	2024-01-03 12:50:24.536903162 +0100
-+++ run/custom/templates/user/settings/security/twofa_enroll.tmpl	2024-01-03 15:55:24.500457940 +0100
++++ run/custom/templates/user/settings/security/twofa_enroll.tmpl	2024-05-22 22:27:56.491872588 +0200
 @@ -1,25 +1,4 @@
  {{template "user/settings/layout_head" (dict "ctxData" . "pageClass" "user settings twofa")}}
 -	<div class="user-setting-content">
