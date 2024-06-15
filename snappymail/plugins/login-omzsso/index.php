@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2023 warp03
+ * Copyright (C) 2023-2024 warp03
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -10,16 +10,16 @@ class LoginOmzssoPlugin extends \RainLoop\Plugins\AbstractPlugin {
 
 	const
 		NAME     = "omzsso",
-		VERSION  = "1.1",
+		VERSION  = "1.2",
 		RELEASE  = "2023-06-10",
 		REQUIRED = "2.28.0",
 		CATEGORY = "Login",
-		DESCRIPTION = "Login through account.omegazero.org";
+		DESCRIPTION = "Login through idp.warpcs.org";
 
 	const
-		LOGIN_URI = "https://account.omegazero.org/sm/capi/oauth2/authorize.php",
-		TOKEN_URI = "https://account.omegazero.org/sm/capi/oauth2/token.php",
-		USERINFO_URI = "https://account.omegazero.org/sm/capi/oidc/userinfo.php";
+		LOGIN_URI = "https://idp.warpcs.org/sm/capi/oauth2/authorize.php",
+		TOKEN_URI = "https://idp.warpcs.org/sm/capi/oauth2/token.php",
+		USERINFO_URI = "https://idp.warpcs.org/sm/capi/oidc/userinfo.php";
 
 	public function Init() : void {
 		$this->UseLangs(true);
@@ -170,7 +170,7 @@ class LoginOmzssoPlugin extends \RainLoop\Plugins\AbstractPlugin {
 		if(!$rcpt || count($rcpt) < 1)
 			return;
 		$msgid = substr($msgid, 1, strpos($msgid, "@") - 1);
-		$receivedVal = "by webmail.omegazero.org (SnappyMail) with HTTP id " . $msgid;
+		$receivedVal = "by webmail.warpcs.org (SnappyMail) with HTTP id " . $msgid;
 		if($from instanceof \MailSo\Mime\Email)
 			$receivedVal .= " (envelope-from <" . $from->GetEmail() . ">)";
 		if($rcpt[0] instanceof \MailSo\Mime\Email)
