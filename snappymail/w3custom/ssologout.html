@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8" /><script type="application/javascript">
+
+function initerror(err){
+	document.body.innerHTML = err;
+	console.error("ssologout (" + window.location.host + ") init error: " + err);
+}
+
+function post(status){
+	window.parent.postMessage(status, "https://idp.warpcs.org");
+}
+
+function request(method, url, hdrs = {}, body){
+	return new Promise((resolve, reject) => {
+		let xhr = new XMLHttpRequest();
+		xhr.addEventListener("load", () => {
+			try{
+				if(xhr.status !== 200)
+					throw new Error("HTTP Status: " + xhr.status);
+				resolve(JSON.parse(xhr.responseText));
+			}catch(e){
+				reject(e);
+			}
+		});
+		xhr.addEventListener("error", reject);
+		xhr.open(method, url);
+		for(let h in hdrs)
+			xhr.setRequestHeader(h, hdrs[h]);
+		xhr.send(body);
+	});
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+	if(window.parent == window){
+		initerror("Must not be a top level document");
+		return;
+	}
+	if(document.referrer != "https://idp.warpcs.org/"){
+		initerror("Invalid parent: " + document.referrer);
+		return;
+	}
+	post("frontchannel_status");
+	request("GET", "/?/AppData/0/1/").then((appdata) => {
+		return request("POST", "/?/Json/=&q[]=/0/", {"X-SM-Token": appdata.System.token}, '{"Action":"Logout"}');
+	}).then((logoutres) => {
+		if(logoutres.Result)
+			post("success");
+		else
+			throw new Error("Logout request did not return Result == true");
+	}).catch((e) => {
+		console.error("ssologout (" + window.location.host + ") error: " + e);
+		post("error");
+	});
+});
+
+</script></head>
+</html>

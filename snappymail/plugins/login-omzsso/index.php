@@ -118,24 +118,25 @@ class LoginOmzssoPlugin extends \RainLoop\Plugins\AbstractPlugin {
 		foreach($accountsJson as $account){
 			$email = $account["email"];
 			$password = $account["webmailToken"] ?? "--NOPW--";
+			$dataobj = ["email" => $email, "login" => $email, "pass" => $password, "smtp" => ["user" => $email, "pass" => $password]];
 			if($mainAccount != null){
-				$addAccount = \RainLoop\Model\AdditionalAccount::NewInstanceFromCredentials($actions, $email, $email, new \SnappyMail\SensitiveString($password));
+				$addAccount = \RainLoop\Model\AdditionalAccount::NewInstanceFromTokenArray($actions, $dataobj, true);
 				if(!$addAccount)
 					return "Account model creation failed";
 				$additionalAccounts[$email] = $addAccount->asTokenArray($mainAccount);
 			}else{
-				$mainAccount = \RainLoop\Model\MainAccount::NewInstanceFromCredentials($actions, $email, $email, new \SnappyMail\SensitiveString($password));
+				$mainAccount = \RainLoop\Model\MainAccount::NewInstanceFromTokenArray($actions, $dataobj, true);
 				if(!$mainAccount)
 					return "Account model creation failed";
+				$actions->StorageProvider()->Put($mainAccount, RainLoop\Providers\Storage\Enumerations\StorageType::SESSION, RainLoop\Utils::GetSessionToken(), "true");
+				$actions->SetMainAuthAccount($mainAccount);
+				$actions->SetAuthToken($mainAccount);
 			}
 		}
 		if(!$mainAccount)
 			return "User has no accounts";
-		$actions->StorageProvider()->Put($mainAccount, RainLoop\Providers\Storage\Enumerations\StorageType::SESSION, RainLoop\Utils::GetSessionToken(), "true");
 		if($additionalAccounts)
 			$actions->SetAccounts($mainAccount, $additionalAccounts);
-
-		$actions->SetAuthToken($mainAccount);
 
 		\MailSo\Base\Http::Location("./");
 		return null;

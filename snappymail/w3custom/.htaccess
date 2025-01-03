@@ -1,0 +1,4 @@
+
+header always set content-security-policy "script-src 'unsafe-inline'; frame-ancestors https://idp.warpcs.org"
+header always set cross-origin-resource-policy "cross-origin"
+header set cache-control "max-age=3600"
