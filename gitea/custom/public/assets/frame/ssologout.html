@@ -7,7 +7,7 @@ function initerror(err){
 }
 
 function post(status){
-	window.parent.postMessage(status, "https://account.omegazero.org");
+	window.parent.postMessage(status, "https://idp.warpcs.org");
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -15,7 +15,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		initerror("Must not be a top level document");
 		return;
 	}
-	if(document.referrer != "https://account.omegazero.org/"){
+	if(document.referrer != "https://idp.warpcs.org/"){
 		initerror("Invalid parent: " + document.referrer);
 		return;
 	}

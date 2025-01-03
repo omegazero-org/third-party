@@ -5,12 +5,14 @@ Only in repo/templates/base: alert_details.tmpl
 Only in repo/templates/base: disable_form_autofill.tmpl
 Only in repo/templates/base: footer.tmpl
 diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/footer_content.tmpl
---- repo/templates/base/footer_content.tmpl	2024-01-03 12:50:23.879905427 +0100
-+++ run/custom/templates/base/footer_content.tmpl	2024-05-22 22:30:34.626955375 +0200
-@@ -1,18 +1,7 @@
+--- repo/templates/base/footer_content.tmpl	2025-01-03 16:28:49.659440210 +0100
++++ run/custom/templates/base/footer_content.tmpl	2025-01-03 16:54:34.268972994 +0100
+@@ -1,20 +1,7 @@
  <footer class="page-footer" role="group" aria-label="{{ctx.Locale.Tr "aria.footer"}}">
  	<div class="left-links" role="contentinfo" aria-label="{{ctx.Locale.Tr "aria.footer.software"}}">
--		<a target="_blank" rel="noopener noreferrer" href="https://about.gitea.com">{{ctx.Locale.Tr "powered_by" "Gitea"}}</a>
+-		{{if ShowFooterPoweredBy}}
+-			<a target="_blank" rel="noopener noreferrer" href="https://about.gitea.com">{{ctx.Locale.Tr "powered_by" "Gitea"}}</a>
+-		{{end}}
 -		{{if (or .ShowFooterVersion .PageIsAdmin)}}
 -			{{ctx.Locale.Tr "version"}}:
 -			{{if .IsAdmin}}
@@ -28,11 +30,11 @@ diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/
  	</div>
  	<div class="right-links" role="group" aria-label="{{ctx.Locale.Tr "aria.footer.links"}}">
  		<div class="ui dropdown upward language">
-@@ -23,8 +12,10 @@
+@@ -25,8 +12,10 @@
  				{{end}}
  			</div>
  		</div>
-+		<a target="_blank" rel="noopener noreferrer" href="https://warpcs.org/">warp CS</a>
++		<a target="_blank" rel="noopener noreferrer" href="https://warpcs.org/">WarpCS</a>
  		<a href="{{AssetUrlPrefix}}/licenses.txt">{{ctx.Locale.Tr "licenses"}}</a>
  		{{if .EnableSwagger}}<a href="{{AppSubUrl}}/api/swagger">API</a>{{end}}
 +		<a target="_blank" rel="noopener noreferrer" href="https://gitea.io">Gitea Website</a>
@@ -40,8 +42,8 @@ diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/
  	</div>
  </footer>
 diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
---- repo/templates/base/head.tmpl	2024-01-03 12:50:23.883464039 +0100
-+++ run/custom/templates/base/head.tmpl	2024-05-22 22:30:42.460254679 +0200
+--- repo/templates/base/head.tmpl	2025-01-03 16:28:49.660388020 +0100
++++ run/custom/templates/base/head.tmpl	2025-01-03 16:52:54.778577281 +0100
 @@ -7,7 +7,7 @@
  	<meta name="author" content="{{if .Repository}}{{.Owner.Name}}{{else}}{{MetaAuthor}}{{end}}">
  	<meta name="description" content="{{if .Repository}}{{.Repository.Name}}{{if .Repository.Description}} - {{.Repository.Description}}{{end}}{{else}}{{MetaDescription}}{{end}}">
@@ -67,13 +69,13 @@ diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
  	{{template "custom/header" .}}
 +<script src="/assets/custom/mirrorlink.js"></script>
  </head>
- <body>
- 	{{ctx.DataRaceCheck $.Context}}
+ <body hx-headers='{"x-csrf-token": "{{.CsrfToken}}"}' hx-swap="outerHTML" hx-ext="morph" hx-push-url="false">
+ 	{{template "custom/body_outer_pre" .}}
 diff -u -r -P repo/templates/base/head_navbar.tmpl run/custom/templates/base/head_navbar.tmpl
---- repo/templates/base/head_navbar.tmpl	2024-01-03 12:50:23.885307604 +0100
-+++ run/custom/templates/base/head_navbar.tmpl	2024-05-22 22:31:03.237834407 +0200
+--- repo/templates/base/head_navbar.tmpl	2025-01-03 16:28:49.662155554 +0100
++++ run/custom/templates/base/head_navbar.tmpl	2025-01-03 16:52:54.780132533 +0100
 @@ -7,7 +7,7 @@
- 	<div class="navbar-left ui secondary menu">
+ 	<div class="navbar-left">
  		<!-- the logo -->
  		<a class="item" id="navbar-logo" href="{{AppSubUrl}}/" aria-label="{{if .IsSigned}}{{ctx.Locale.Tr "dashboard"}}{{else}}{{ctx.Locale.Tr "home"}}{{end}}">
 -			<img width="30" height="30" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{ctx.Locale.Tr "logo"}}" aria-hidden="true">
@@ -81,7 +83,7 @@ diff -u -r -P repo/templates/base/head_navbar.tmpl run/custom/templates/base/hea
  		</a>
  
  		<!-- mobile right menu, it must be here because in mobile view, each item is a flex column, the first item is a full row column -->
-@@ -46,10 +46,6 @@
+@@ -54,10 +54,6 @@
  		{{end}}
  
  		{{template "custom/extra_links" .}}
@@ -92,7 +94,7 @@ diff -u -r -P repo/templates/base/head_navbar.tmpl run/custom/templates/base/hea
  	</div>
  
  	<!-- the full dropdown menus -->
-@@ -171,10 +167,6 @@
+@@ -151,10 +147,6 @@
  						{{svg "octicon-tools"}}
  						{{ctx.Locale.Tr "your_settings"}}
  					</a>
@@ -103,7 +105,7 @@ diff -u -r -P repo/templates/base/head_navbar.tmpl run/custom/templates/base/hea
  					{{if .IsAdmin}}
  						<div class="divider"></div>
  
-@@ -185,9 +177,9 @@
+@@ -165,9 +157,9 @@
  					{{end}}
  
  					<div class="divider"></div>
@@ -118,19 +120,19 @@ diff -u -r -P repo/templates/base/head_navbar.tmpl run/custom/templates/base/hea
 Only in repo/templates/base: head_opengraph.tmpl
 Only in repo/templates/base: head_script.tmpl
 Only in repo/templates/base: head_style.tmpl
+Only in repo/templates/base: markup_codepreview.tmpl
 Only in repo/templates/base: modal_actions_confirm.tmpl
 Only in repo/templates/base: paginate.tmpl
-Only in repo/templates: code
 Only in repo/templates: custom
 Only in repo/templates: devtest
 Only in repo/templates: explore
 diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
---- repo/templates/home.tmpl	2024-01-03 12:50:23.925922540 +0100
-+++ run/custom/templates/home.tmpl	2024-05-22 22:33:32.289752874 +0200
+--- repo/templates/home.tmpl	2025-01-03 16:28:49.699700611 +0100
++++ run/custom/templates/home.tmpl	2025-01-03 16:59:23.675084557 +0100
 @@ -1,51 +1,27 @@
  {{template "base/head" .}}
  <div role="main" aria-label="{{if .IsSigned}}{{ctx.Locale.Tr "dashboard"}}{{else}}{{ctx.Locale.Tr "home"}}{{end}}" class="page-content home">
- 	<div class="gt-mb-5 gt-px-5">
+ 	<div class="tw-mb-8 tw-px-8">
 -		<div class="center">
 -			<img class="logo" width="220" height="220" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{ctx.Locale.Tr "logo"}}">
 -			<div class="hero">
@@ -149,7 +151,7 @@ diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
 -				{{svg "octicon-flame"}} {{ctx.Locale.Tr "startpage.install"}}
 -			</h1>
 -			<p class="large">
--				{{ctx.Locale.Tr "startpage.install_desc" | Str2html}}
+-				{{ctx.Locale.Tr "startpage.install_desc"}}
 -			</p>
 -		</div>
 -		<div class="eight wide center column">
@@ -157,7 +159,7 @@ diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
 -				{{svg "octicon-device-desktop"}} {{ctx.Locale.Tr "startpage.platform"}}
 -			</h1>
 -			<p class="large">
--				{{ctx.Locale.Tr "startpage.platform_desc" | Str2html}}
+-				{{ctx.Locale.Tr "startpage.platform_desc"}}
 -			</p>
 -		</div>
 -	</div>
@@ -167,7 +169,7 @@ diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
 -				{{svg "octicon-rocket"}} {{ctx.Locale.Tr "startpage.lightweight"}}
 -			</h1>
 -			<p class="large">
--				{{ctx.Locale.Tr "startpage.lightweight_desc" | Str2html}}
+-				{{ctx.Locale.Tr "startpage.lightweight_desc"}}
 -			</p>
 -		</div>
 -		<div class="eight wide center column">
@@ -175,18 +177,18 @@ diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
 -				{{svg "octicon-code"}} {{ctx.Locale.Tr "startpage.license"}}
 -			</h1>
 -			<p class="large">
--				{{ctx.Locale.Tr "startpage.license_desc" | Str2html}}
+-				{{ctx.Locale.Tr "startpage.license_desc"}}
 -			</p>
 -		</div>
 -	</div>
 +	<div class="ui stackable middle page grid">
 +		<div class="eight wide aligned centered column">
-+			This is the main <i>warp CS</i> git server which hosts most of our open source code and is also available for use by other individuals. There are a few more open source applications which do not use version control and are only available at <a href="https://sw.warpcs.org/">sw.warpcs.org</a>.
++			This is the main <i>WarpCS</i> git server which hosts most of our open source code and is also available for use by other individuals. There are a few more open source applications which do not use version control and are only available at <a href="https://sw.warpcs.org/">sw.warpcs.org</a>.
 + 		</div>
 +		<div class="eight wide aligned centered column">
 +			<ul>
 +				<li class="">
-+					<a href="/omegazero">warp CS source code</a>
++					<a href="/omegazero">WarpCS source code</a>
 +				</li>
 +				<li class="">
 +					<a href="/explore/repos">Explore repositories</a>
@@ -210,6 +212,7 @@ Only in repo/templates: shared
 Only in repo/templates: status
 Only in repo/templates: swagger
 Only in repo/templates/user/auth: activate.tmpl
+Only in repo/templates/user/auth: activate_prompt.tmpl
 Only in repo/templates/user/auth: captcha.tmpl
 Only in repo/templates/user/auth: change_passwd.tmpl
 Only in repo/templates/user/auth: change_passwd_inner.tmpl
@@ -218,10 +221,10 @@ Only in repo/templates/user/auth: forgot_passwd.tmpl
 Only in repo/templates/user/auth: grant.tmpl
 Only in repo/templates/user/auth: grant_error.tmpl
 diff -u -r -P repo/templates/user/auth/link_account.tmpl run/custom/templates/user/auth/link_account.tmpl
---- repo/templates/user/auth/link_account.tmpl	2024-01-03 12:50:24.443559017 +0100
-+++ run/custom/templates/user/auth/link_account.tmpl	2024-05-22 22:27:56.483755310 +0200
-@@ -4,28 +4,18 @@
- 		<div class="new-menu-inner">
+--- repo/templates/user/auth/link_account.tmpl	2025-01-03 16:28:50.217795010 +0100
++++ run/custom/templates/user/auth/link_account.tmpl	2025-01-03 16:55:59.166319720 +0100
+@@ -4,25 +4,18 @@
+ 		<div class="overflow-menu-items tw-justify-center">
  			<!-- TODO handle .ShowRegistrationButton once other login bugs are fixed -->
  			{{if not .AllowOnlyInternalRegistration}}
 -				<a class="item {{if not .user_exists}}active{{end}}"
@@ -235,19 +238,16 @@ diff -u -r -P repo/templates/user/auth/link_account.tmpl run/custom/templates/us
 -				{{ctx.Locale.Tr "auth.oauth_signin_tab"}}
 -			</a>
  		</div>
- 	</div>
+ 	</overflow-menu>
  	<div class="ui middle very relaxed page grid">
  		<div class="column">
--			<div class="ui tab {{if not .user_exists}}active{{end}}"
-+			<div class="ui tab active"
- 				data-tab="auth-link-signup-tab">
+-			<div class="ui tab {{if not .user_exists}}active{{end}}" data-tab="auth-link-signup-tab">
++			<div class="ui tab active" data-tab="auth-link-signup-tab">
+ 				{{if .AutoRegistrationFailedPrompt}}<div class="ui message">{{.AutoRegistrationFailedPrompt}}</div>{{end}}
  				{{template "user/auth/signup_inner" .}}
 -			</div>
--			<div class="ui tab {{if .user_exists}}active{{end}}"
--				data-tab="auth-link-signin-tab">
--				<div class="ui user signin container icon">
--					{{template "user/auth/signin_inner" .}}
--				</div>
+-			<div class="ui tab {{if .user_exists}}active{{end}}" data-tab="auth-link-signin-tab">
+-				{{template "user/auth/signin_inner" .}}
  			</div>
  		</div>
  	</div>
@@ -256,25 +256,24 @@ Only in repo/templates/user/auth: prohibit_login.tmpl
 Only in repo/templates/user/auth: reset_passwd.tmpl
 Only in repo/templates/user/auth: signin.tmpl
 diff -u -r -P repo/templates/user/auth/signin_inner.tmpl run/custom/templates/user/auth/signin_inner.tmpl
---- repo/templates/user/auth/signin_inner.tmpl	2024-01-03 12:50:24.451442697 +0100
-+++ run/custom/templates/user/auth/signin_inner.tmpl	2024-05-22 22:27:56.484773970 +0200
-@@ -11,51 +11,7 @@
+--- repo/templates/user/auth/signin_inner.tmpl	2025-01-03 16:28:50.225438078 +0100
++++ run/custom/templates/user/auth/signin_inner.tmpl	2025-01-03 16:56:47.516449513 +0100
+@@ -11,48 +11,7 @@
  <div class="ui attached segment">
- 	<form class="ui form" action="{{.SignInLink}}" method="post">
+ 	<form class="ui form tw-max-w-2xl tw-m-auto" action="{{.SignInLink}}" method="post">
  	{{.CsrfTokenHtml}}
--	<div class="required inline field {{if and (.Err_UserName) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn))}}error{{end}}">
+-	<div class="required field {{if and (.Err_UserName) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn))}}error{{end}}">
 -		<label for="user_name">{{ctx.Locale.Tr "home.uname_holder"}}</label>
 -		<input id="user_name" type="text" name="user_name" value="{{.user_name}}" autofocus required>
 -	</div>
 -	{{if or (not .DisablePassword) .LinkAccountMode}}
--	<div class="required inline field {{if and (.Err_Password) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn))}}error{{end}}">
+-	<div class="required field {{if and (.Err_Password) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn))}}error{{end}}">
 -		<label for="password">{{ctx.Locale.Tr "password"}}</label>
 -		<input id="password" name="password" type="password" value="{{.password}}" autocomplete="current-password" required>
 -	</div>
 -	{{end}}
 -	{{if not .LinkAccountMode}}
 -	<div class="inline field">
--		<label></label>
 -		<div class="ui checkbox">
 -			<label>{{ctx.Locale.Tr "auth.remember_me"}}</label>
 -			<input name="remember" type="checkbox">
@@ -284,8 +283,7 @@ diff -u -r -P repo/templates/user/auth/signin_inner.tmpl run/custom/templates/us
  
 -	{{template "user/auth/captcha" .}}
 -
--	<div class="inline field">
--		<label></label>
+-	<div class="field">
 -		<button class="ui primary button">
 -			{{if .LinkAccountMode}}
 -				{{ctx.Locale.Tr "auth.oauth_signin_submit"}}
@@ -297,20 +295,19 @@ diff -u -r -P repo/templates/user/auth/signin_inner.tmpl run/custom/templates/us
 -	</div>
 -
 -	{{if .ShowRegistrationButton}}
--		<div class="inline field">
--			<label></label>
--			<a href="{{AppSubUrl}}/user/sign_up">{{ctx.Locale.Tr "auth.sign_up_now" | Str2html}}</a>
+-		<div class="field">
+-			<a href="{{AppSubUrl}}/user/sign_up">{{ctx.Locale.Tr "auth.sign_up_now"}}</a>
 -		</div>
 -	{{end}}
 -
--	{{if and .OrderedOAuth2Names .OAuth2Providers}}
+-	{{if .OAuth2Providers}}
 -	<div class="divider divider-text">
 -		{{ctx.Locale.Tr "sign_in_or"}}
 -	</div>
- 	<div id="oauth2-login-navigator" class="gt-py-2">
- 		<div class="gt-df gt-fc gt-jc">
- 			<div id="oauth2-login-navigator-inner" class="gt-df gt-fc gt-fw gt-ac gt-gap-3">
-@@ -69,6 +25,5 @@
+ 	<div id="oauth2-login-navigator" class="tw-py-1">
+ 		<div class="tw-flex tw-flex-col tw-justify-center">
+ 			<div id="oauth2-login-navigator-inner" class="tw-flex tw-flex-col tw-flex-wrap tw-items-center tw-gap-2">
+@@ -65,6 +24,5 @@
  			</div>
  		</div>
  	</div>
@@ -335,8 +332,8 @@ Only in repo/templates/user: notification
 Only in repo/templates/user: overview
 Only in repo/templates/user: profile.tmpl
 diff -u -r -P repo/templates/user/settings/account.tmpl run/custom/templates/user/settings/account.tmpl
---- repo/templates/user/settings/account.tmpl	2024-01-03 12:50:24.499589597 +0100
-+++ run/custom/templates/user/settings/account.tmpl	2024-05-22 22:30:15.525643716 +0200
+--- repo/templates/user/settings/account.tmpl	2025-01-03 16:28:50.271106656 +0100
++++ run/custom/templates/user/settings/account.tmpl	2025-01-03 16:52:54.787222550 +0100
 @@ -4,35 +4,7 @@
  			{{ctx.Locale.Tr "settings.password"}}
  		</h4>
@@ -379,7 +376,7 @@ Only in repo/templates/user/settings: appearance.tmpl
 Only in repo/templates/user/settings: applications.tmpl
 diff -u -r -P repo/templates/user/settings/applications_oauth2.tmpl run/custom/templates/user/settings/applications_oauth2.tmpl
 --- repo/templates/user/settings/applications_oauth2.tmpl	2024-01-03 12:50:24.506934565 +0100
-+++ run/custom/templates/user/settings/applications_oauth2.tmpl	2024-05-22 22:27:56.486852808 +0200
++++ run/custom/templates/user/settings/applications_oauth2.tmpl	2025-01-03 16:52:54.788031915 +0100
 @@ -1,6 +1,11 @@
 +
 +{{if .IsAdmin}}
@@ -395,6 +392,7 @@ diff -u -r -P repo/templates/user/settings/applications_oauth2.tmpl run/custom/t
 Only in repo/templates/user/settings: applications_oauth2_edit.tmpl
 Only in repo/templates/user/settings: applications_oauth2_edit_form.tmpl
 Only in repo/templates/user/settings: applications_oauth2_list.tmpl
+Only in repo/templates/user/settings: blocked_users.tmpl
 Only in repo/templates/user/settings: grants_oauth2.tmpl
 Only in repo/templates/user/settings: hook_new.tmpl
 Only in repo/templates/user/settings: hooks.tmpl
@@ -410,8 +408,8 @@ Only in repo/templates/user/settings: packages.tmpl
 Only in repo/templates/user/settings: packages_cleanup_rules_edit.tmpl
 Only in repo/templates/user/settings: packages_cleanup_rules_preview.tmpl
 diff -u -r -P repo/templates/user/settings/profile.tmpl run/custom/templates/user/settings/profile.tmpl
---- repo/templates/user/settings/profile.tmpl	2024-01-03 12:50:24.527950766 +0100
-+++ run/custom/templates/user/settings/profile.tmpl	2024-05-22 22:30:21.448376801 +0200
+--- repo/templates/user/settings/profile.tmpl	2025-01-03 16:28:50.296271753 +0100
++++ run/custom/templates/user/settings/profile.tmpl	2025-01-03 16:58:23.266453402 +0100
 @@ -97,38 +97,8 @@
  			{{ctx.Locale.Tr "settings.avatar"}}
  		</h4>
@@ -425,7 +423,7 @@ diff -u -r -P repo/templates/user/settings/profile.tmpl run/custom/templates/use
 -						<label>{{ctx.Locale.Tr "settings.lookup_avatar_by_mail"}}</label>
 -					</div>
 -				</div>
--				<div class="field gt-pl-4 {{if .Err_Gravatar}}error{{end}}">
+-				<div class="field tw-pl-4 {{if .Err_Gravatar}}error{{end}}">
 -					<label for="gravatar">Avatar {{ctx.Locale.Tr "email"}}</label>
 -					<input id="gravatar" name="gravatar" value="{{.SignedUser.AvatarEmail}}">
 -				</div>
@@ -438,9 +436,9 @@ diff -u -r -P repo/templates/user/settings/profile.tmpl run/custom/templates/use
 -					</div>
 -				</div>
 -
--				<div class="inline field gt-pl-4">
--					<label for="avatar">{{ctx.Locale.Tr "settings.choose_new_avatar"}}</label>
--					<input name="avatar" type="file" accept="image/png,image/jpeg,image/gif,image/webp">
+-				<div class="inline field tw-pl-4">
+-					<label for="new-avatar">{{ctx.Locale.Tr "settings.choose_new_avatar"}}</label>
+-					<input id="new-avatar" name="avatar" type="file" accept="image/png,image/jpeg,image/gif,image/webp">
 -				</div>
 -
 -				<div class="field">
@@ -457,7 +455,7 @@ Only in repo/templates/user/settings: repos.tmpl
 Only in repo/templates/user/settings: runner_edit.tmpl
 diff -u -r -P repo/templates/user/settings/security/accountlinks.tmpl run/custom/templates/user/settings/security/accountlinks.tmpl
 --- repo/templates/user/settings/security/accountlinks.tmpl	2024-01-03 12:50:24.531325417 +0100
-+++ run/custom/templates/user/settings/security/accountlinks.tmpl	2024-05-22 22:27:56.488973969 +0200
++++ run/custom/templates/user/settings/security/accountlinks.tmpl	2025-01-03 16:52:54.790451564 +0100
 @@ -2,22 +2,6 @@
  {{if or .AccountLinks .OrderedOAuth2Names}}
  <h4 class="ui top attached header">
@@ -508,7 +506,7 @@ diff -u -r -P repo/templates/user/settings/security/accountlinks.tmpl run/custom
 Only in repo/templates/user/settings/security: openid.tmpl
 diff -u -r -P repo/templates/user/settings/security/security.tmpl run/custom/templates/user/settings/security/security.tmpl
 --- repo/templates/user/settings/security/security.tmpl	2023-07-30 12:02:10.175866582 +0200
-+++ run/custom/templates/user/settings/security/security.tmpl	2024-05-22 22:27:56.489916082 +0200
++++ run/custom/templates/user/settings/security/security.tmpl	2025-01-03 16:52:54.791262025 +0100
 @@ -1,7 +1,6 @@
  {{template "user/settings/layout_head" (dict "ctxData" . "pageClass" "user settings security")}}
  	<div class="user-setting-content">
@@ -518,14 +516,14 @@ diff -u -r -P repo/templates/user/settings/security/security.tmpl run/custom/tem
  		{{if .EnableOpenIDSignIn}}
  		{{template "user/settings/security/openid" .}}
 diff -u -r -P repo/templates/user/settings/security/twofa.tmpl run/custom/templates/user/settings/security/twofa.tmpl
---- repo/templates/user/settings/security/twofa.tmpl	2024-01-03 12:50:24.533362312 +0100
-+++ run/custom/templates/user/settings/security/twofa.tmpl	2024-05-22 22:30:24.359713787 +0200
-@@ -3,33 +3,5 @@
+--- repo/templates/user/settings/security/twofa.tmpl	2025-01-03 16:28:50.302926545 +0100
++++ run/custom/templates/user/settings/security/twofa.tmpl	2025-01-03 16:57:22.966388806 +0100
+@@ -3,35 +3,5 @@
  </h4>
  <div class="ui attached segment">
  	<p>{{ctx.Locale.Tr "settings.twofa_desc"}}</p>
 -	{{if .TOTPEnrolled}}
--	<p>{{ctx.Locale.Tr "settings.twofa_is_enrolled" | Str2html}}</p>
+-	<p>{{ctx.Locale.Tr "settings.twofa_is_enrolled"}}</p>
 -	<form class="ui form" action="{{AppSubUrl}}/user/settings/security/two_factor/regenerate_scratch" method="post" enctype="multipart/form-data">
 -		{{.CsrfTokenHtml}}
 -		<p>{{ctx.Locale.Tr "settings.regenerate_scratch_token_desc"}}</p>
@@ -537,6 +535,8 @@ diff -u -r -P repo/templates/user/settings/security/twofa.tmpl run/custom/templa
 -		<button class="ui red button delete-button" data-modal-id="disable-twofa" data-type="form" data-form="#disable-form">{{ctx.Locale.Tr "settings.twofa_disable"}}</button>
 -	</form>
 -	{{else}}
+-	{{/* The recovery tip is there as a means of encouraging a user to enroll */}}
+-	<p>{{ctx.Locale.Tr "settings.twofa_recovery_tip"}}</p>
 -	<p>{{ctx.Locale.Tr "settings.twofa_not_enrolled"}}</p>
 -	<div class="inline field">
 -		<a class="ui primary button" href="{{AppSubUrl}}/user/settings/security/two_factor/enroll">{{ctx.Locale.Tr "settings.twofa_enroll"}}</a>
@@ -557,7 +557,7 @@ diff -u -r -P repo/templates/user/settings/security/twofa.tmpl run/custom/templa
  </div>
 diff -u -r -P repo/templates/user/settings/security/twofa_enroll.tmpl run/custom/templates/user/settings/security/twofa_enroll.tmpl
 --- repo/templates/user/settings/security/twofa_enroll.tmpl	2024-01-03 12:50:24.536903162 +0100
-+++ run/custom/templates/user/settings/security/twofa_enroll.tmpl	2024-05-22 22:27:56.491872588 +0200
++++ run/custom/templates/user/settings/security/twofa_enroll.tmpl	2025-01-03 16:53:05.655681495 +0100
 @@ -1,25 +1,4 @@
  {{template "user/settings/layout_head" (dict "ctxData" . "pageClass" "user settings twofa")}}
 -	<div class="user-setting-content">

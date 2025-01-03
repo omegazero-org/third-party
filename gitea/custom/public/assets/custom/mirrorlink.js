@@ -2,12 +2,12 @@
 (function(){
 
 	const mirrorTypeText = {
-		"omz-source": "View on source.omegazero.org",
+		"omz-source": "View on sw.warpcs.org",
 		"github": "GitHub mirror"
 	};
 
 	function init(){
-		fetch("https://api.omegazero.org/v2/git/mirrors").then((res) => {
+		fetch("https://api.warpcs.org/v2/git/mirrors").then((res) => {
 			return res.json();
 		}).then((json) => {
 			addLinks(json);
@@ -24,10 +24,8 @@
 			addRepoLink(repoHeader, mirrors, path.slice(3, 6), path.slice(6).join("/"));
 		}else{
 			let listItems = document.querySelectorAll("div.repositories.explore div.flex-item");
-				console.log(listItems);
 			for(let item of listItems){
-				let name = item.querySelector("div.flex-item-title a.name").getAttribute("href").substring(1);
-				console.log(name);
+				let name = Array.from(item.querySelectorAll("div.flex-item-title a.name")).pop().getAttribute("href").substring(1);
 				let mirrors = data[name];
 				if(!mirrors)
 					continue;
@@ -43,6 +41,7 @@
 		let linkContainer = document.createElement("div");
 		//linkContainer.style.float = "right";
 		//linkContainer.style["text-align"] = "right";
+		linkContainer.style["line-height"] = "0px";
 		let mcHtml = "";
 		for(let mirrorType in mirrors){
 			let text = mirrorTypeText[mirrorType];
