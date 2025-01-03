@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8" /><script type="application/javascript">
+
+function initerror(err){
+	document.body.innerHTML = err;
+	console.error("ssologout (" + window.location.host + ") init error: " + err);
+}
+
+function postError(errordetail){
+	if(errordetail)
+		console.error("ssologout (" + window.location.host + ") error: " + errordetail);
+	post("error");
+}
+
+function post(status){
+	window.parent.postMessage(status, "https://idp.warpcs.org");
+}
+
+function getHTML(){
+	return new Promise((resolve, reject) => {
+		let xhr = new XMLHttpRequest();
+		xhr.addEventListener("load", () => {
+			try{
+				resolve(JSON.parse(xhr.responseText).query.tokens);
+			}catch(e){
+				reject(e);
+			}
+		});
+		xhr.addEventListener("error", reject);
+		xhr.open("GET", "/wiki/w/api.php?action=query&meta=tokens&format=json");
+		xhr.send();
+	});
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+	if(window.parent == window){
+		initerror("Must not be a top level document");
+		return;
+	}
+	if(document.referrer != "https://idp.warpcs.org/"){
+		initerror("Invalid parent: " + document.referrer);
+		return;
+	}
+	post("frontchannel_status");
+	getHTML().then((tokens) => {
+		/*let i1 = pagebody.indexOf('"csrfToken":');
+		let csrfStart = pagebody.indexOf('"', i1 + 12) + 1;
+		let csrfEnd = pagebody.indexOf('"', csrfStart);
+		if(csrfStart <= 0 || csrfEnd < 0){
+			postError("CSRF token not found");
+			return;
+		}
+		let csrfToken = pagebody.substring(csrfStart, csrfEnd).replace(/\\\\/g, "\\");*/
+		let xhr = new XMLHttpRequest();
+		xhr.addEventListener("load", () => {
+			post(xhr.status == 200 ? "success" : "error");
+		});
+		xhr.addEventListener("error", () => {
+			post("error");
+		});
+		xhr.open("POST", "/wiki/w/api.php");
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		xhr.send("action=logout&format=json&token=" + encodeURIComponent(tokens.csrftoken));
+	}).catch(() => {
+		postError("GET request failed");
+	});
+});
+
+</script></head>
+</html>

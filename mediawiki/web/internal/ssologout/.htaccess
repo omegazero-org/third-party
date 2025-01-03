@@ -1,0 +1,4 @@
+
+header set content-security-policy "script-src 'unsafe-inline'; frame-ancestors https://idp.warpcs.org"
+header set cross-origin-resource-policy "cross-origin"
+header set cross-origin-embedder-policy "require-corp"
