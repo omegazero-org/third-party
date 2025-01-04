@@ -1,6 +1,6 @@
-diff -u -r -N kanboard-1.2.21/.htaccess www/.htaccess
---- kanboard-1.2.21/.htaccess	2021-12-16 23:20:55.000000000 +0100
-+++ www/.htaccess	2022-01-30 13:18:15.596789229 +0100
+diff -u -r -N kanboard-1.2.43/.htaccess www/.htaccess
+--- kanboard-1.2.43/.htaccess	2024-12-18 22:30:14.000000000 +0100
++++ www/.htaccess	2025-01-04 12:38:37.446838664 +0100
 @@ -19,6 +19,7 @@
  
      RewriteEngine On
@@ -9,9 +9,9 @@ diff -u -r -N kanboard-1.2.21/.htaccess www/.htaccess
      RewriteRule ^ index.php [QSA,L]
      
      ############################
-diff -u -r -N kanboard-1.2.21/app/Controller/AvatarFileController.php www/app/Controller/AvatarFileController.php
---- kanboard-1.2.21/app/Controller/AvatarFileController.php	2021-12-16 23:20:55.000000000 +0100
-+++ www/app/Controller/AvatarFileController.php	2022-01-25 23:27:33.143523420 +0100
+diff -u -r -N kanboard-1.2.43/app/Controller/AvatarFileController.php www/app/Controller/AvatarFileController.php
+--- kanboard-1.2.43/app/Controller/AvatarFileController.php	2024-12-18 22:30:14.000000000 +0100
++++ www/app/Controller/AvatarFileController.php	2025-01-04 12:45:33.387126724 +0100
 @@ -33,7 +33,7 @@
          $this->checkCSRFParam();
          $user = $this->getUser();
@@ -27,7 +27,7 @@ diff -u -r -N kanboard-1.2.21/app/Controller/AvatarFileController.php www/app/Co
              }
 -        }
 +        }*/
-+        $this->flash->failure(t('You must edit your avatar on account.omegazero.org'));
++        $this->flash->failure(t('You must edit your avatar on idp.warpcs.org'));
  
          $this->renderResponse($user['id']);
      }
@@ -39,7 +39,7 @@ diff -u -r -N kanboard-1.2.21/app/Controller/AvatarFileController.php www/app/Co
 -        $this->userSession->refresh($user['id']);
 +        /*$this->avatarFileModel->remove($user['id']);
 +        $this->userSession->refresh($user['id']);*/
-+        $this->flash->failure(t('You must edit your avatar on account.omegazero.org'));
++        $this->flash->failure(t('You must edit your avatar on idp.warpcs.org'));
          $this->renderResponse($user['id']);
      }
  
@@ -62,9 +62,9 @@ diff -u -r -N kanboard-1.2.21/app/Controller/AvatarFileController.php www/app/Co
      }
  
      /**
-diff -u -r -N kanboard-1.2.21/app/Controller/OAuthController.php www/app/Controller/OAuthController.php
---- kanboard-1.2.21/app/Controller/OAuthController.php	2021-12-16 23:20:55.000000000 +0100
-+++ www/app/Controller/OAuthController.php	2022-01-25 23:31:54.383710407 +0100
+diff -u -r -N kanboard-1.2.43/app/Controller/OAuthController.php www/app/Controller/OAuthController.php
+--- kanboard-1.2.43/app/Controller/OAuthController.php	2024-12-18 22:30:14.000000000 +0100
++++ www/app/Controller/OAuthController.php	2025-01-04 12:38:37.451781787 +0100
 @@ -88,11 +88,13 @@
          $backend = $this->request->getStringParam('backend');
          $this->checkCSRFParam();
@@ -80,14 +80,14 @@ diff -u -r -N kanboard-1.2.21/app/Controller/OAuthController.php www/app/Control
  
          $this->response->redirect($this->helper->url->to('UserViewController', 'external', array('user_id' => $this->userSession->getId())));
      }
-diff -u -r -N kanboard-1.2.21/app/Controller/TwoFactorController.php www/app/Controller/TwoFactorController.php
---- kanboard-1.2.21/app/Controller/TwoFactorController.php	2021-12-16 23:20:55.000000000 +0100
-+++ www/app/Controller/TwoFactorController.php	2022-03-24 21:05:18.474338131 +0100
+diff -u -r -N kanboard-1.2.43/app/Controller/TwoFactorController.php www/app/Controller/TwoFactorController.php
+--- kanboard-1.2.43/app/Controller/TwoFactorController.php	2024-12-18 22:30:14.000000000 +0100
++++ www/app/Controller/TwoFactorController.php	2025-01-04 12:45:39.609923962 +0100
 @@ -79,6 +79,8 @@
       */
      public function test()
      {
-+        $this->flash->failure(t('You must configure two factor authentication at account.omegazero.org'));
++        $this->flash->failure(t('You must configure two factor authentication at idp.warpcs.org'));
 +        /*
          $user = $this->getUser();
          $this->checkCurrentUser($user);
@@ -109,10 +109,10 @@ diff -u -r -N kanboard-1.2.21/app/Controller/TwoFactorController.php www/app/Con
      }
  
      /**
-diff -u -r -N kanboard-1.2.21/app/Controller/UserModificationController.php www/app/Controller/UserModificationController.php
---- kanboard-1.2.21/app/Controller/UserModificationController.php	2021-12-16 23:20:55.000000000 +0100
-+++ www/app/Controller/UserModificationController.php	2022-01-29 18:13:36.403334403 +0100
-@@ -49,9 +49,9 @@
+diff -u -r -N kanboard-1.2.43/app/Controller/UserModificationController.php www/app/Controller/UserModificationController.php
+--- kanboard-1.2.43/app/Controller/UserModificationController.php	2024-12-18 22:30:14.000000000 +0100
++++ www/app/Controller/UserModificationController.php	2025-01-04 12:41:46.699924331 +0100
+@@ -50,9 +50,9 @@
          if (! $this->userSession->isAdmin()) {
              $values = array(
                  'id' => $this->userSession->getId(),
@@ -122,12 +122,12 @@ diff -u -r -N kanboard-1.2.21/app/Controller/UserModificationController.php www/
 +                'username' => $user["username"],
 +                'name' => $user["name"],
 +                'email' => $user["email"],
+                 'theme' => isset($values['theme']) ? $values['theme'] : '',
                  'timezone' => isset($values['timezone']) ? $values['timezone'] : '',
                  'language' => isset($values['language']) ? $values['language'] : '',
-                 'filter' => isset($values['filter']) ? $values['filter'] : '',
-diff -u -r -N kanboard-1.2.21/app/ServiceProvider/AvatarProvider.php www/app/ServiceProvider/AvatarProvider.php
---- kanboard-1.2.21/app/ServiceProvider/AvatarProvider.php	2021-12-16 23:20:55.000000000 +0100
-+++ www/app/ServiceProvider/AvatarProvider.php	2022-01-24 23:11:27.564711630 +0100
+diff -u -r -N kanboard-1.2.43/app/ServiceProvider/AvatarProvider.php www/app/ServiceProvider/AvatarProvider.php
+--- kanboard-1.2.43/app/ServiceProvider/AvatarProvider.php	2024-12-18 22:30:14.000000000 +0100
++++ www/app/ServiceProvider/AvatarProvider.php	2025-01-04 12:38:37.458038667 +0100
 @@ -28,6 +28,7 @@
          $container['avatarManager'] = new AvatarManager;
          $container['avatarManager']->register(new LetterAvatarProvider($container));
@@ -136,9 +136,9 @@ diff -u -r -N kanboard-1.2.21/app/ServiceProvider/AvatarProvider.php www/app/Ser
          return $container;
      }
  }
-diff -u -r -N kanboard-1.2.21/app/ServiceProvider/EventDispatcherProvider.php www/app/ServiceProvider/EventDispatcherProvider.php
---- kanboard-1.2.21/app/ServiceProvider/EventDispatcherProvider.php	2021-12-16 23:20:55.000000000 +0100
-+++ www/app/ServiceProvider/EventDispatcherProvider.php	2022-01-24 23:45:04.145581102 +0100
+diff -u -r -N kanboard-1.2.43/app/ServiceProvider/EventDispatcherProvider.php www/app/ServiceProvider/EventDispatcherProvider.php
+--- kanboard-1.2.43/app/ServiceProvider/EventDispatcherProvider.php	2024-12-18 22:30:14.000000000 +0100
++++ www/app/ServiceProvider/EventDispatcherProvider.php	2025-01-04 12:38:37.459105397 +0100
 @@ -32,6 +32,7 @@
          $container['dispatcher']->addSubscriber(new NotificationSubscriber($container));
          $container['dispatcher']->addSubscriber(new TransitionSubscriber($container));
@@ -147,14 +147,14 @@ diff -u -r -N kanboard-1.2.21/app/ServiceProvider/EventDispatcherProvider.php ww
  
          if (LDAP_AUTH && LDAP_USER_ATTRIBUTE_PHOTO !== '') {
              $container['dispatcher']->addSubscriber(new LdapUserPhotoSubscriber($container));
-diff -u -r -N kanboard-1.2.21/app/Template/avatar_file/show.php www/app/Template/avatar_file/show.php
---- kanboard-1.2.21/app/Template/avatar_file/show.php	2021-12-16 23:20:55.000000000 +0100
-+++ www/app/Template/avatar_file/show.php	2022-03-24 20:45:05.790843307 +0100
+diff -u -r -N kanboard-1.2.43/app/Template/avatar_file/show.php www/app/Template/avatar_file/show.php
+--- kanboard-1.2.43/app/Template/avatar_file/show.php	2024-12-18 22:30:14.000000000 +0100
++++ www/app/Template/avatar_file/show.php	2025-01-04 12:45:45.621150556 +0100
 @@ -5,6 +5,13 @@
  <?= $this->avatar->render($user['id'], $user['username'], $user['name'], $user['email'], $user['avatar_path'], '') ?>
  
  <div class="form-actions">
-+	<a class="btn" href="https://account.omegazero.org/manage/account/avatar/">Edit Avatar</a>
++	<a class="btn" href="https://idp.warpcs.org/manage/account/avatar/">Edit Avatar</a>
 +</div><br />
 +You may need to re-login to see changes.
 +
@@ -169,32 +169,30 @@ diff -u -r -N kanboard-1.2.21/app/Template/avatar_file/show.php www/app/Template
      </div>
  </form>
 +*/?>
-diff -u -r -N kanboard-1.2.21/app/Template/header/user_dropdown.php www/app/Template/header/user_dropdown.php
---- kanboard-1.2.21/app/Template/header/user_dropdown.php	2021-12-16 23:20:55.000000000 +0100
-+++ www/app/Template/header/user_dropdown.php	2022-05-24 15:00:24.893616145 +0200
-@@ -32,10 +32,10 @@
+diff -u -r -N kanboard-1.2.43/app/Template/header/user_dropdown.php www/app/Template/header/user_dropdown.php
+--- kanboard-1.2.43/app/Template/header/user_dropdown.php	2024-12-18 22:30:14.000000000 +0100
++++ www/app/Template/header/user_dropdown.php	2025-01-04 12:42:33.039548875 +0100
+@@ -32,10 +32,8 @@
              <i class="fa fa-fw fa-life-ring" aria-hidden="true"></i>
-             <?= $this->url->doc(t('Documentation'), 'index') ?>
+             <?= $this->url->doc(t('Documentation')) ?>
          </li>
 -        <?php if (! DISABLE_LOGOUT): ?>
-+        <?php /*if (! DISABLE_LOGOUT):*/ ?>
              <li>
--                <?= $this->url->icon('sign-out', t('Logout'), 'AuthController', 'logout') ?>
-+                <i class="fa fa-fw fa-sign-out" aria-hidden="true"></i><a href="https://account.omegazero.org/logout/?flcid=00000000ce351bd3c6b5f9a6c28f5f93">SSO Logout</a>
+-                <?= $this->url->icon('sign-out', t('Logout'), 'AuthController', 'logout', [], true) ?>
++                <i class="fa fa-fw fa-sign-out" aria-hidden="true"></i><a href="https://idp.warpcs.org/logout/?flcid=00000000ce351bd3c6b5f9a6c28f5f93">SSO Logout</a>
              </li>
 -        <?php endif ?>
-+        <?php /*endif*/ ?>
      </ul>
  </div>
-diff -u -r -N kanboard-1.2.21/app/Template/twofactor/index.php www/app/Template/twofactor/index.php
---- kanboard-1.2.21/app/Template/twofactor/index.php	2021-12-16 23:20:55.000000000 +0100
-+++ www/app/Template/twofactor/index.php	2022-03-24 21:08:04.875374600 +0100
+diff -u -r -N kanboard-1.2.43/app/Template/twofactor/index.php www/app/Template/twofactor/index.php
+--- kanboard-1.2.43/app/Template/twofactor/index.php	2024-12-18 22:30:14.000000000 +0100
++++ www/app/Template/twofactor/index.php	2025-01-04 12:45:52.765956363 +0100
 @@ -2,6 +2,12 @@
      <h2><?= t('Two factor authentication') ?></h2>
  </div>
  
 +<div class="form-actions">
-+    <a class="btn" href="https://account.omegazero.org/manage/account/2fa/">Two-Factor Authentication Settings</a>
++    <a class="btn" href="https://idp.warpcs.org/manage/account/2fa/">Two-Factor Authentication Settings</a>
 +</div>
 +
 +<?php
@@ -207,11 +205,11 @@ diff -u -r -N kanboard-1.2.21/app/Template/twofactor/index.php www/app/Template/
      </div>
  </form>
 +*/?>
-diff -u -r -N kanboard-1.2.21/app/Template/user_modification/show.php www/app/Template/user_modification/show.php
---- kanboard-1.2.21/app/Template/user_modification/show.php	2021-12-16 23:20:55.000000000 +0100
-+++ www/app/Template/user_modification/show.php	2022-01-29 18:08:45.382530053 +0100
+diff -u -r -N kanboard-1.2.43/app/Template/user_modification/show.php www/app/Template/user_modification/show.php
+--- kanboard-1.2.43/app/Template/user_modification/show.php	2024-12-18 22:30:14.000000000 +0100
++++ www/app/Template/user_modification/show.php	2025-01-04 12:38:37.465495356 +0100
 @@ -11,10 +11,10 @@
-         <?= $this->form->text('username', $values, $errors, array('autofocus', 'required', 'autocomplete="username"', isset($values['is_ldap_user']) && $values['is_ldap_user'] == 1 && !$this->user->isAdmin() ? 'readonly' : '', 'maxlength="191"')) ?>
+         <?= $this->form->text('username', $values, $errors, array('autofocus', 'required', 'autocomplete="username"', isset($user['is_ldap_user']) && $user['is_ldap_user'] == 1 ? 'readonly' : '', 'maxlength="191"')) ?>
  
          <?= $this->form->label(t('Name'), 'name') ?>
 -        <?= $this->form->text('name', $values, $errors, array($this->user->hasAccess('UserModificationController', 'show/edit_name') ? 'autocomplete="name"' : 'readonly')) ?>
@@ -223,30 +221,30 @@ diff -u -r -N kanboard-1.2.21/app/Template/user_modification/show.php www/app/Te
      </fieldset>
  
      <fieldset>
-diff -u -r -N kanboard-1.2.21/app/Template/user_view/external.php www/app/Template/user_view/external.php
---- kanboard-1.2.21/app/Template/user_view/external.php	2021-12-16 23:20:55.000000000 +0100
-+++ www/app/Template/user_view/external.php	2022-03-24 21:10:29.420932197 +0100
+diff -u -r -N kanboard-1.2.43/app/Template/user_view/external.php www/app/Template/user_view/external.php
+--- kanboard-1.2.43/app/Template/user_view/external.php	2024-12-18 22:30:14.000000000 +0100
++++ www/app/Template/user_view/external.php	2025-01-04 12:38:37.466923564 +0100
 @@ -8,4 +8,5 @@
      <p class="alert"><?= t('No external authentication enabled.') ?></p>
  <?php else: ?>
      <?= $html ?>
 +    ^ This button does not work
  <?php endif ?>
-diff -u -r -N kanboard-1.2.21/assets/.htaccess www/assets/.htaccess
---- kanboard-1.2.21/assets/.htaccess	1970-01-01 01:00:00.000000000 +0100
-+++ www/assets/.htaccess	2021-12-27 15:11:22.971279000 +0100
+diff -u -r -N kanboard-1.2.43/assets/.htaccess www/assets/.htaccess
+--- kanboard-1.2.43/assets/.htaccess	1970-01-01 01:00:00.000000000 +0100
++++ www/assets/.htaccess	2025-01-04 12:38:37.468581691 +0100
 @@ -0,0 +1,2 @@
 +
 +Header set Cache-Control "max-age=3600, s-maxage=604800, s-immutable"
-diff -u -r -N kanboard-1.2.21/assets/img/.htaccess www/assets/img/.htaccess
---- kanboard-1.2.21/assets/img/.htaccess	1970-01-01 01:00:00.000000000 +0100
-+++ www/assets/img/.htaccess	2022-01-02 18:59:07.057965000 +0100
+diff -u -r -N kanboard-1.2.43/assets/img/.htaccess www/assets/img/.htaccess
+--- kanboard-1.2.43/assets/img/.htaccess	1970-01-01 01:00:00.000000000 +0100
++++ www/assets/img/.htaccess	2025-01-04 12:38:37.470162513 +0100
 @@ -0,0 +1,2 @@
 +
 +Header set cross-origin-resource-policy "cross-origin"
 diff -u -r -N kanboard-1.2.21/plugins/OAuth2/Controller/OAuthController.php www/plugins/OAuth2/Controller/OAuthController.php
---- kanboard-1.2.21/plugins/OAuth2/Controller/OAuthController.php	2022-10-02 10:38:51.300290017 +0200
-+++ www/plugins/OAuth2/Controller/OAuthController.php	2021-12-31 20:59:02.782701700 +0100
+--- kanboard-1.2.21/plugins/OAuth2/Controller/OAuthController.php   2022-10-02 10:38:51.300290017 +0200
++++ www/plugins/OAuth2/Controller/OAuthController.php   2021-12-31 20:59:02.782701700 +0100
 @@ -19,6 +19,11 @@
       */
      public function handler()
@@ -261,8 +259,8 @@ diff -u -r -N kanboard-1.2.21/plugins/OAuth2/Controller/OAuthController.php www/
      }
  }
 diff -u -r -N kanboard-1.2.21/plugins/OAuth2/Template/config/integration.php www/plugins/OAuth2/Template/config/integration.php
---- kanboard-1.2.21/plugins/OAuth2/Template/config/integration.php	2022-10-02 10:38:51.364338953 +0200
-+++ www/plugins/OAuth2/Template/config/integration.php	2022-01-24 23:38:57.703059770 +0100
+--- kanboard-1.2.21/plugins/OAuth2/Template/config/integration.php  2022-10-02 10:38:51.364338953 +0200
++++ www/plugins/OAuth2/Template/config/integration.php  2022-01-24 23:38:57.703059770 +0100
 @@ -30,6 +30,9 @@
      <?= $this->form->label(t('Email Key'), 'oauth2_key_email') ?>
      <?= $this->form->text('oauth2_key_email', $values) ?>
@@ -274,8 +272,8 @@ diff -u -r -N kanboard-1.2.21/plugins/OAuth2/Template/config/integration.php www
      <?= $this->form->text('oauth2_key_user_id', $values) ?>
  
 diff -u -r -N kanboard-1.2.21/plugins/OAuth2/User/GenericOAuth2UserProvider.php www/plugins/OAuth2/User/GenericOAuth2UserProvider.php
---- kanboard-1.2.21/plugins/OAuth2/User/GenericOAuth2UserProvider.php	2022-10-02 10:38:51.395660639 +0200
-+++ www/plugins/OAuth2/User/GenericOAuth2UserProvider.php	2022-01-24 23:38:38.592061185 +0100
+--- kanboard-1.2.21/plugins/OAuth2/User/GenericOAuth2UserProvider.php   2022-10-02 10:38:51.395660639 +0200
++++ www/plugins/OAuth2/User/GenericOAuth2UserProvider.php   2022-01-24 23:38:38.592061185 +0100
 @@ -267,4 +267,9 @@
          }
          return ! empty($key) && isset($value) ? $value : '';
@@ -286,17 +284,17 @@ diff -u -r -N kanboard-1.2.21/plugins/OAuth2/User/GenericOAuth2UserProvider.php 
 +        return $this->getKey('oauth2_key_avatar');
 +    }
  }
-diff -u -r -N kanboard-1.2.21/ssologout/.htaccess www/ssologout/.htaccess
---- kanboard-1.2.21/ssologout/.htaccess	1970-01-01 01:00:00.000000000 +0100
-+++ www/ssologout/.htaccess	2022-01-30 21:34:12.863944520 +0100
+diff -u -r -N kanboard-1.2.43/ssologout/.htaccess www/ssologout/.htaccess
+--- kanboard-1.2.43/ssologout/.htaccess	1970-01-01 01:00:00.000000000 +0100
++++ www/ssologout/.htaccess	2025-01-04 12:46:05.899818077 +0100
 @@ -0,0 +1,4 @@
 +
-+header always set content-security-policy "script-src 'unsafe-inline'; frame-ancestors https://account.omegazero.org"
++header always set content-security-policy "script-src 'unsafe-inline'; frame-ancestors https://idp.warpcs.org"
 +header always set cross-origin-resource-policy "cross-origin"
 +header set cache-control "max-age=3600"
-diff -u -r -N kanboard-1.2.21/ssologout/ssologout.html www/ssologout/ssologout.html
---- kanboard-1.2.21/ssologout/ssologout.html	1970-01-01 01:00:00.000000000 +0100
-+++ www/ssologout/ssologout.html	2022-02-04 19:01:29.674736022 +0100
+diff -u -r -N kanboard-1.2.43/ssologout/ssologout.html www/ssologout/ssologout.html
+--- kanboard-1.2.43/ssologout/ssologout.html	1970-01-01 01:00:00.000000000 +0100
++++ www/ssologout/ssologout.html	2025-01-04 12:46:16.133683690 +0100
 @@ -0,0 +1,35 @@
 +<!DOCTYPE html>
 +<html><head><meta charset="utf-8" /><script type="application/javascript">
@@ -307,7 +305,7 @@ diff -u -r -N kanboard-1.2.21/ssologout/ssologout.html www/ssologout/ssologout.h
 +}
 +
 +function post(status){
-+	window.parent.postMessage(status, "https://account.omegazero.org");
++	window.parent.postMessage(status, "https://idp.warpcs.org");
 +}
 +
 +window.addEventListener("DOMContentLoaded", () => {
@@ -315,7 +313,7 @@ diff -u -r -N kanboard-1.2.21/ssologout/ssologout.html www/ssologout/ssologout.h
 +		initerror("Must not be a top level document");
 +		return;
 +	}
-+	if(document.referrer != "https://account.omegazero.org/"){
++	if(document.referrer != "https://idp.warpcs.org/"){
 +		initerror("Invalid parent: " + document.referrer);
 +		return;
 +	}
@@ -333,20 +331,20 @@ diff -u -r -N kanboard-1.2.21/ssologout/ssologout.html www/ssologout/ssologout.h
 +
 +</script></head>
 +</html>
-diff -u -r -N kanboard-1.2.21/vendor/composer/autoload_classmap.php www/vendor/composer/autoload_classmap.php
---- kanboard-1.2.21/vendor/composer/autoload_classmap.php   2021-12-16 23:20:55.000000000 +0100
-+++ www/vendor/composer/autoload_classmap.php   2022-01-24 23:44:56.612017411 +0100
-@@ -942,4 +942,6 @@
+diff -u -r -N kanboard-1.2.43/vendor/composer/autoload_classmap.php www/vendor/composer/autoload_classmap.php
+--- kanboard-1.2.43/vendor/composer/autoload_classmap.php	2024-12-18 22:30:14.000000000 +0100
++++ www/vendor/composer/autoload_classmap.php	2025-01-04 12:38:45.155969146 +0100
+@@ -990,4 +990,6 @@
      'Symfony\\Polyfill\\Php80\\PhpToken' => $vendorDir . '/symfony/polyfill-php80/PhpToken.php',
      'UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
      'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
 +    'org\\omegazero\\kanboardext\\UserAvatarUrlProvider' => $vendorDir . '/omegazero/kanboardext/UserAvatarUrlProvider.php',
 +    'org\\omegazero\\kanboardext\\OAuthUserAvatarSubscriber' => $vendorDir . '/omegazero/kanboardext/OAuthUserAvatarSubscriber.php',
  );
-diff -u -r -N kanboard-1.2.21/vendor/composer/autoload_static.php www/vendor/composer/autoload_static.php
---- kanboard-1.2.21/vendor/composer/autoload_static.php 2021-12-16 23:20:55.000000000 +0100
-+++ www/vendor/composer/autoload_static.php 2022-01-24 23:44:44.577796914 +0100
-@@ -1106,6 +1106,8 @@
+diff -u -r -N kanboard-1.2.43/vendor/composer/autoload_static.php www/vendor/composer/autoload_static.php
+--- kanboard-1.2.43/vendor/composer/autoload_static.php	2024-12-18 22:30:14.000000000 +0100
++++ www/vendor/composer/autoload_static.php	2025-01-04 12:38:45.158553540 +0100
+@@ -1182,6 +1182,8 @@
          'Symfony\\Polyfill\\Php80\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/PhpToken.php',
          'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
          'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
@@ -355,9 +353,9 @@ diff -u -r -N kanboard-1.2.21/vendor/composer/autoload_static.php www/vendor/com
      );
  
      public static function getInitializer(ClassLoader $loader)
-diff -u -r -N kanboard-1.2.21/vendor/omegazero/kanboardext/OAuthUserAvatarSubscriber.php www/vendor/omegazero/kanboardext/OAuthUserAvatarSubscriber.php
---- kanboard-1.2.21/vendor/omegazero/kanboardext/OAuthUserAvatarSubscriber.php	1970-01-01 01:00:00.000000000 +0100
-+++ www/vendor/omegazero/kanboardext/OAuthUserAvatarSubscriber.php	2022-01-24 23:47:59.671331694 +0100
+diff -u -r -N kanboard-1.2.43/vendor/omegazero/kanboardext/OAuthUserAvatarSubscriber.php www/vendor/omegazero/kanboardext/OAuthUserAvatarSubscriber.php
+--- kanboard-1.2.43/vendor/omegazero/kanboardext/OAuthUserAvatarSubscriber.php	1970-01-01 01:00:00.000000000 +0100
++++ www/vendor/omegazero/kanboardext/OAuthUserAvatarSubscriber.php	2025-01-04 12:38:45.161405912 +0100
 @@ -0,0 +1,29 @@
 +<?php
 +
@@ -388,9 +386,9 @@ diff -u -r -N kanboard-1.2.21/vendor/omegazero/kanboardext/OAuthUserAvatarSubscr
 +		}
 +	}
 +}
-diff -u -r -N kanboard-1.2.21/vendor/omegazero/kanboardext/UserAvatarUrlProvider.php www/vendor/omegazero/kanboardext/UserAvatarUrlProvider.php
---- kanboard-1.2.21/vendor/omegazero/kanboardext/UserAvatarUrlProvider.php	1970-01-01 01:00:00.000000000 +0100
-+++ www/vendor/omegazero/kanboardext/UserAvatarUrlProvider.php	2022-01-24 23:12:06.657364422 +0100
+diff -u -r -N kanboard-1.2.43/vendor/omegazero/kanboardext/UserAvatarUrlProvider.php www/vendor/omegazero/kanboardext/UserAvatarUrlProvider.php
+--- kanboard-1.2.43/vendor/omegazero/kanboardext/UserAvatarUrlProvider.php	1970-01-01 01:00:00.000000000 +0100
++++ www/vendor/omegazero/kanboardext/UserAvatarUrlProvider.php	2025-01-04 12:38:45.162647030 +0100
 @@ -0,0 +1,19 @@
 +<?php
 +

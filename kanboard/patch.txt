@@ -1,5 +1,5 @@
 
 diff -u -r -N kanboard-1.2.21 www > changes.patch
 
-patch -uE -i ../changes.patch -p1 -V none -d www_u -s
+patch -uE -i ../changes.patch -p1 -V none -s
 
