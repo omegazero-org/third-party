@@ -118,7 +118,7 @@ class LoginOmzssoPlugin extends \RainLoop\Plugins\AbstractPlugin {
 		foreach($accountsJson as $account){
 			$email = $account["email"];
 			$password = $account["webmailToken"] ?? "--NOPW--";
-			$dataobj = ["email" => $email, "login" => $email, "pass" => $password, "smtp" => ["user" => $email, "pass" => $password]];
+			$dataobj = ["email" => $email, "login" => $email, "pass" => $password];
 			if($mainAccount != null){
 				$addAccount = \RainLoop\Model\AdditionalAccount::NewInstanceFromTokenArray($actions, $dataobj, true);
 				if(!$addAccount)

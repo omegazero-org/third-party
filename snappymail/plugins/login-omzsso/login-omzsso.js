@@ -31,6 +31,9 @@
 			logoutbtn.addEventListener("click", (event) => {
 				window.location = "https://idp.warpcs.org/logout/?flcid=00000000acc47584080e740529d4b3fd";
 			});
+			setTimeout(() => {
+				logoutbtn.innerText = logoutbtn.innerText + " (SSO)";
+			}, 200);
 		}
 	});
 })();
