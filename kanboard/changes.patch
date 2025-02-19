@@ -1,14 +1,20 @@
 diff -u -r -N kanboard-1.2.43/.htaccess www/.htaccess
 --- kanboard-1.2.43/.htaccess	2024-12-18 22:30:14.000000000 +0100
-+++ www/.htaccess	2025-01-04 12:38:37.446838664 +0100
-@@ -19,6 +19,7 @@
++++ www/.htaccess	2025-02-19 13:35:11.473449018 +0100
+@@ -19,7 +19,13 @@
  
      RewriteEngine On
      RewriteCond %{REQUEST_FILENAME} !-f
 +    RewriteCond %{REQUEST_URI} !^/ssologout/.*
      RewriteRule ^ index.php [QSA,L]
++
++	RewriteCond %{HTTP_HOST} !^board\.warpcs\.org$
++	RewriteCond %{HTTP_HOST} !^10\.
++	RewriteCond %{HTTP_HOST} !\.internal$
++    RewriteRule ^ https://board.warpcs.org/ [QSA,L]
      
      ############################
+     ## Uncomment the two lines below to enable force HTTPS capabilities
 diff -u -r -N kanboard-1.2.43/app/Controller/AvatarFileController.php www/app/Controller/AvatarFileController.php
 --- kanboard-1.2.43/app/Controller/AvatarFileController.php	2024-12-18 22:30:14.000000000 +0100
 +++ www/app/Controller/AvatarFileController.php	2025-01-04 12:45:33.387126724 +0100
@@ -242,9 +248,9 @@ diff -u -r -N kanboard-1.2.43/assets/img/.htaccess www/assets/img/.htaccess
 @@ -0,0 +1,2 @@
 +
 +Header set cross-origin-resource-policy "cross-origin"
-diff -u -r -N kanboard-1.2.21/plugins/OAuth2/Controller/OAuthController.php www/plugins/OAuth2/Controller/OAuthController.php
---- kanboard-1.2.21/plugins/OAuth2/Controller/OAuthController.php   2022-10-02 10:38:51.300290017 +0200
-+++ www/plugins/OAuth2/Controller/OAuthController.php   2021-12-31 20:59:02.782701700 +0100
+diff -u -r -N kanboard-1.2.43/plugins/OAuth2/Controller/OAuthController.php www/plugins/OAuth2/Controller/OAuthController.php
+--- kanboard-1.2.43/plugins/OAuth2/Controller/OAuthController.php	2022-10-02 10:38:51.300290017 +0200
++++ www/plugins/OAuth2/Controller/OAuthController.php	2021-12-31 20:59:02.782701700 +0100
 @@ -19,6 +19,11 @@
       */
      public function handler()
@@ -258,9 +264,9 @@ diff -u -r -N kanboard-1.2.21/plugins/OAuth2/Controller/OAuthController.php www/
 +			$this->step1('OAuth2');
      }
  }
-diff -u -r -N kanboard-1.2.21/plugins/OAuth2/Template/config/integration.php www/plugins/OAuth2/Template/config/integration.php
---- kanboard-1.2.21/plugins/OAuth2/Template/config/integration.php  2022-10-02 10:38:51.364338953 +0200
-+++ www/plugins/OAuth2/Template/config/integration.php  2022-01-24 23:38:57.703059770 +0100
+diff -u -r -N kanboard-1.2.43/plugins/OAuth2/Template/config/integration.php www/plugins/OAuth2/Template/config/integration.php
+--- kanboard-1.2.43/plugins/OAuth2/Template/config/integration.php	2022-10-02 10:38:51.364338953 +0200
++++ www/plugins/OAuth2/Template/config/integration.php	2022-01-24 23:38:57.703059770 +0100
 @@ -30,6 +30,9 @@
      <?= $this->form->label(t('Email Key'), 'oauth2_key_email') ?>
      <?= $this->form->text('oauth2_key_email', $values) ?>
@@ -271,9 +277,9 @@ diff -u -r -N kanboard-1.2.21/plugins/OAuth2/Template/config/integration.php www
      <?= $this->form->label(t('User ID Key'), 'oauth2_key_user_id') ?>
      <?= $this->form->text('oauth2_key_user_id', $values) ?>
  
-diff -u -r -N kanboard-1.2.21/plugins/OAuth2/User/GenericOAuth2UserProvider.php www/plugins/OAuth2/User/GenericOAuth2UserProvider.php
---- kanboard-1.2.21/plugins/OAuth2/User/GenericOAuth2UserProvider.php   2022-10-02 10:38:51.395660639 +0200
-+++ www/plugins/OAuth2/User/GenericOAuth2UserProvider.php   2022-01-24 23:38:38.592061185 +0100
+diff -u -r -N kanboard-1.2.43/plugins/OAuth2/User/GenericOAuth2UserProvider.php www/plugins/OAuth2/User/GenericOAuth2UserProvider.php
+--- kanboard-1.2.43/plugins/OAuth2/User/GenericOAuth2UserProvider.php	2022-10-02 10:38:51.395660639 +0200
++++ www/plugins/OAuth2/User/GenericOAuth2UserProvider.php	2022-01-24 23:38:38.592061185 +0100
 @@ -267,4 +267,9 @@
          }
          return ! empty($key) && isset($value) ? $value : '';
