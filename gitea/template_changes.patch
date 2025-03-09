@@ -5,8 +5,8 @@ Only in repo/templates/base: alert_details.tmpl
 Only in repo/templates/base: disable_form_autofill.tmpl
 Only in repo/templates/base: footer.tmpl
 diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/footer_content.tmpl
---- repo/templates/base/footer_content.tmpl	2025-01-03 16:28:49.659440210 +0100
-+++ run/custom/templates/base/footer_content.tmpl	2025-01-03 16:54:34.268972994 +0100
+--- repo/templates/base/footer_content.tmpl	2025-03-09 19:10:03.657603874 +0100
++++ run/custom/templates/base/footer_content.tmpl	2025-03-09 19:14:09.084051051 +0100
 @@ -1,20 +1,7 @@
  <footer class="page-footer" role="group" aria-label="{{ctx.Locale.Tr "aria.footer"}}">
  	<div class="left-links" role="contentinfo" aria-label="{{ctx.Locale.Tr "aria.footer.software"}}">
@@ -16,7 +16,7 @@ diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/
 -		{{if (or .ShowFooterVersion .PageIsAdmin)}}
 -			{{ctx.Locale.Tr "version"}}:
 -			{{if .IsAdmin}}
--				<a href="{{AppSubUrl}}/admin/config">{{AppVer}}</a>
+-				<a href="{{AppSubUrl}}/-/admin/config">{{AppVer}}</a>
 -			{{else}}
 -				{{AppVer}}
 -			{{end}}
@@ -29,9 +29,9 @@ diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/
 +		 <strong>{{LoadTimes .PageStartTime}}</strong> {{ctx.Locale.Tr "template"}}:{{if .TemplateName}} {{.TemplateName}}{{end}} <strong>{{call .TemplateLoadTimes}}</strong>{{end}}
  	</div>
  	<div class="right-links" role="group" aria-label="{{ctx.Locale.Tr "aria.footer.links"}}">
- 		<div class="ui dropdown upward language">
+ 		<div class="ui dropdown upward">
 @@ -25,8 +12,10 @@
- 				{{end}}
+ 				{{end -}}
  			</div>
  		</div>
 +		<a target="_blank" rel="noopener noreferrer" href="https://warpcs.org/">WarpCS</a>
@@ -43,7 +43,7 @@ diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/
  </footer>
 diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
 --- repo/templates/base/head.tmpl	2025-01-03 16:28:49.660388020 +0100
-+++ run/custom/templates/base/head.tmpl	2025-01-03 16:52:54.778577281 +0100
++++ run/custom/templates/base/head.tmpl	2025-03-09 19:13:24.314324105 +0100
 @@ -7,7 +7,7 @@
  	<meta name="author" content="{{if .Repository}}{{.Owner.Name}}{{else}}{{MetaAuthor}}{{end}}">
  	<meta name="description" content="{{if .Repository}}{{.Repository.Name}}{{if .Repository.Description}} - {{.Repository.Description}}{{end}}{{else}}{{MetaDescription}}{{end}}">
@@ -72,8 +72,8 @@ diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
  <body hx-headers='{"x-csrf-token": "{{.CsrfToken}}"}' hx-swap="outerHTML" hx-ext="morph" hx-push-url="false">
  	{{template "custom/body_outer_pre" .}}
 diff -u -r -P repo/templates/base/head_navbar.tmpl run/custom/templates/base/head_navbar.tmpl
---- repo/templates/base/head_navbar.tmpl	2025-01-03 16:28:49.662155554 +0100
-+++ run/custom/templates/base/head_navbar.tmpl	2025-01-03 16:52:54.780132533 +0100
+--- repo/templates/base/head_navbar.tmpl	2025-03-09 19:10:03.661997043 +0100
++++ run/custom/templates/base/head_navbar.tmpl	2025-03-09 19:13:24.315456071 +0100
 @@ -7,7 +7,7 @@
  	<div class="navbar-left">
  		<!-- the logo -->
@@ -127,8 +127,8 @@ Only in repo/templates: custom
 Only in repo/templates: devtest
 Only in repo/templates: explore
 diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
---- repo/templates/home.tmpl	2025-01-03 16:28:49.699700611 +0100
-+++ run/custom/templates/home.tmpl	2025-01-03 16:59:23.675084557 +0100
+--- repo/templates/home.tmpl	2025-03-09 19:10:03.693704535 +0100
++++ run/custom/templates/home.tmpl	2025-03-09 19:22:01.810691029 +0100
 @@ -1,51 +1,27 @@
  {{template "base/head" .}}
  <div role="main" aria-label="{{if .IsSigned}}{{ctx.Locale.Tr "dashboard"}}{{else}}{{ctx.Locale.Tr "home"}}{{end}}" class="page-content home">
@@ -151,7 +151,7 @@ diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
 -				{{svg "octicon-flame"}} {{ctx.Locale.Tr "startpage.install"}}
 -			</h1>
 -			<p class="large">
--				{{ctx.Locale.Tr "startpage.install_desc"}}
+-				{{ctx.Locale.Tr "startpage.install_desc" "https://docs.gitea.com/installation/install-from-binary" "https://github.com/go-gitea/gitea/tree/master/docker" "https://docs.gitea.com/installation/install-from-package"}}
 -			</p>
 -		</div>
 -		<div class="eight wide center column">
@@ -159,7 +159,7 @@ diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
 -				{{svg "octicon-device-desktop"}} {{ctx.Locale.Tr "startpage.platform"}}
 -			</h1>
 -			<p class="large">
--				{{ctx.Locale.Tr "startpage.platform_desc"}}
+-				{{ctx.Locale.Tr "startpage.platform_desc" "https://go.dev/"}}
 -			</p>
 -		</div>
 -	</div>
@@ -177,7 +177,7 @@ diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
 -				{{svg "octicon-code"}} {{ctx.Locale.Tr "startpage.license"}}
 -			</h1>
 -			<p class="large">
--				{{ctx.Locale.Tr "startpage.license_desc"}}
+-				{{ctx.Locale.Tr "startpage.license_desc" "https://code.gitea.io/gitea" "code.gitea.io/gitea" "https://github.com/go-gitea/gitea"}}
 -			</p>
 -		</div>
 -	</div>
@@ -221,9 +221,9 @@ Only in repo/templates/user/auth: forgot_passwd.tmpl
 Only in repo/templates/user/auth: grant.tmpl
 Only in repo/templates/user/auth: grant_error.tmpl
 diff -u -r -P repo/templates/user/auth/link_account.tmpl run/custom/templates/user/auth/link_account.tmpl
---- repo/templates/user/auth/link_account.tmpl	2025-01-03 16:28:50.217795010 +0100
-+++ run/custom/templates/user/auth/link_account.tmpl	2025-01-03 16:55:59.166319720 +0100
-@@ -4,25 +4,18 @@
+--- repo/templates/user/auth/link_account.tmpl	2025-03-09 19:10:04.010902382 +0100
++++ run/custom/templates/user/auth/link_account.tmpl	2025-03-09 19:17:27.284681322 +0100
+@@ -4,29 +4,20 @@
  		<div class="overflow-menu-items tw-justify-center">
  			<!-- TODO handle .ShowRegistrationButton once other login bugs are fixed -->
  			{{if not .AllowOnlyInternalRegistration}}
@@ -240,81 +240,97 @@ diff -u -r -P repo/templates/user/auth/link_account.tmpl run/custom/templates/us
  		</div>
  	</overflow-menu>
  	<div class="ui middle very relaxed page grid">
- 		<div class="column">
+ 		<div class="column tw-my-5">
+ 			{{/* these styles are quite tricky but it needs to be the same as the signin page */}}
 -			<div class="ui tab {{if not .user_exists}}active{{end}}" data-tab="auth-link-signup-tab">
 +			<div class="ui tab active" data-tab="auth-link-signup-tab">
+ 				<div class="tw-flex tw-flex-col tw-gap-4 tw-max-w-2xl tw-m-auto">
  				{{if .AutoRegistrationFailedPrompt}}<div class="ui message">{{.AutoRegistrationFailedPrompt}}</div>{{end}}
  				{{template "user/auth/signup_inner" .}}
+-				</div>
 -			</div>
 -			<div class="ui tab {{if .user_exists}}active{{end}}" data-tab="auth-link-signin-tab">
+-				<div class="tw-flex tw-flex-col tw-gap-4 tw-max-w-2xl tw-m-auto">
 -				{{template "user/auth/signin_inner" .}}
+ 				</div>
  			</div>
  		</div>
- 	</div>
+Only in repo/templates/user/auth: oauth_container.tmpl
 Only in repo/templates/user/auth: oidc_wellknown.tmpl
 Only in repo/templates/user/auth: prohibit_login.tmpl
 Only in repo/templates/user/auth: reset_passwd.tmpl
 Only in repo/templates/user/auth: signin.tmpl
 diff -u -r -P repo/templates/user/auth/signin_inner.tmpl run/custom/templates/user/auth/signin_inner.tmpl
---- repo/templates/user/auth/signin_inner.tmpl	2025-01-03 16:28:50.225438078 +0100
-+++ run/custom/templates/user/auth/signin_inner.tmpl	2025-01-03 16:56:47.516449513 +0100
-@@ -11,48 +11,7 @@
- <div class="ui attached segment">
- 	<form class="ui form tw-max-w-2xl tw-m-auto" action="{{.SignInLink}}" method="post">
- 	{{.CsrfTokenHtml}}
--	<div class="required field {{if and (.Err_UserName) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn))}}error{{end}}">
--		<label for="user_name">{{ctx.Locale.Tr "home.uname_holder"}}</label>
--		<input id="user_name" type="text" name="user_name" value="{{.user_name}}" autofocus required>
--	</div>
--	{{if or (not .DisablePassword) .LinkAccountMode}}
--	<div class="required field {{if and (.Err_Password) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn))}}error{{end}}">
--		<label for="password">{{ctx.Locale.Tr "password"}}</label>
--		<input id="password" name="password" type="password" value="{{.password}}" autocomplete="current-password" required>
--	</div>
--	{{end}}
--	{{if not .LinkAccountMode}}
--	<div class="inline field">
--		<div class="ui checkbox">
--			<label>{{ctx.Locale.Tr "auth.remember_me"}}</label>
--			<input name="remember" type="checkbox">
--		</div>
--	</div>
--	{{end}}
- 
--	{{template "user/auth/captcha" .}}
--
--	<div class="field">
--		<button class="ui primary button">
--			{{if .LinkAccountMode}}
--				{{ctx.Locale.Tr "auth.oauth_signin_submit"}}
--			{{else}}
--				{{ctx.Locale.Tr "sign_in"}}
+--- repo/templates/user/auth/signin_inner.tmpl	2025-03-09 19:10:04.017800226 +0100
++++ run/custom/templates/user/auth/signin_inner.tmpl	2025-03-09 19:23:26.046675434 +0100
+@@ -10,66 +10,11 @@
+ 		{{end}}
+ 	</h4>
+ 	<div class="ui attached segment">
+-		{{if .EnablePasswordSignInForm}}
+-		<form class="ui form" action="{{.SignInLink}}" method="post">
+-			{{.CsrfTokenHtml}}
+-			<div class="required field {{if and (.Err_UserName) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn))}}error{{end}}">
+-				<label for="user_name">{{ctx.Locale.Tr "home.uname_holder"}}</label>
+-				<input id="user_name" type="text" name="user_name" value="{{.user_name}}" autofocus required tabindex="1">
+-			</div>
+-			{{if or (not .DisablePassword) .LinkAccountMode}}
+-			<div class="required field {{if and (.Err_Password) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn))}}error{{end}} form-field-content-aside-label">
+-				<label for="password">{{ctx.Locale.Tr "password"}}</label>
+-				<div>
+-					<a href="{{AppSubUrl}}/user/forgot_password" tabindex="4">{{ctx.Locale.Tr "auth.forgot_password"}}</a>
+-				</div>
+-				<input id="password" name="password" type="password" value="{{.password}}" autocomplete="current-password" required tabindex="2">
+-			</div>
 -			{{end}}
--		</button>
--		<a href="{{AppSubUrl}}/user/forgot_password">{{ctx.Locale.Tr "auth.forgot_password"}}</a>
--	</div>
+-			{{if not .LinkAccountMode}}
+-			<div class="inline field">
+-				<div class="ui checkbox">
+-					<label>{{ctx.Locale.Tr "auth.remember_me"}}</label>
+-					<input name="remember" type="checkbox" tabindex="5">
+-				</div>
+-			</div>
+-			{{end}}
 -
--	{{if .ShowRegistrationButton}}
--		<div class="field">
--			<a href="{{AppSubUrl}}/user/sign_up">{{ctx.Locale.Tr "auth.sign_up_now"}}</a>
--		</div>
--	{{end}}
+-			{{template "user/auth/captcha" .}}
 -
--	{{if .OAuth2Providers}}
--	<div class="divider divider-text">
--		{{ctx.Locale.Tr "sign_in_or"}}
+-			<div class="field">
+-				<button class="ui primary button tw-w-full" tabindex="3">
+-					{{if .LinkAccountMode}}
+-						{{ctx.Locale.Tr "auth.oauth_signin_submit"}}
+-					{{else}}
+-						{{ctx.Locale.Tr "sign_in"}}
+-					{{end}}
+-				</button>
+-			</div>
+-		</form>
+-		{{end}}{{/*if .EnablePasswordSignInForm*/}}
++		{{/*if .EnablePasswordSignInForm*/}}
+ 		{{/* "oauth_container" contains not only "oauth2" methods, but also "OIDC" and "SSPI" methods */}}
+ 		{{$showOAuth2Methods := or .OAuth2Providers .EnableOpenIDSignIn .EnableSSPI}}
+-		{{if and $showOAuth2Methods .EnablePasswordSignInForm}}
+-			<div class="divider divider-text">{{ctx.Locale.Tr "sign_in_or"}}</div>
+-		{{end}}
+ 		{{if $showOAuth2Methods}}
+ 			{{template "user/auth/oauth_container" .}}
+-		{{end}}
 -	</div>
- 	<div id="oauth2-login-navigator" class="tw-py-1">
- 		<div class="tw-flex tw-flex-col tw-justify-center">
- 			<div id="oauth2-login-navigator-inner" class="tw-flex tw-flex-col tw-flex-wrap tw-items-center tw-gap-2">
-@@ -65,6 +24,5 @@
- 			</div>
- 		</div>
+-</div>
+-
+-<div class="ui container fluid">
+-	{{template "user/auth/webauthn_error" .}}
+-
+-	<div class="ui attached segment header top tw-max-w-2xl tw-m-auto tw-flex tw-flex-col tw-items-center">
+-		<a class="signin-passkey">{{ctx.Locale.Tr "auth.signin_passkey"}}</a>
+-
+-		{{if .ShowRegistrationButton}}
+-			<div class="field">
+-				<span>{{ctx.Locale.Tr "auth.need_account"}}</span>
+-				<a href="{{AppSubUrl}}/user/sign_up">{{ctx.Locale.Tr "auth.sign_up_now"}}</a>
+-			</div>
+ 		{{end}}
  	</div>
--	{{end}}
- 	</form>
  </div>
-Only in repo/templates/user/auth: signin_navbar.tmpl
 Only in repo/templates/user/auth: signin_openid.tmpl
 Only in repo/templates/user/auth: signup.tmpl
 Only in repo/templates/user/auth: signup_inner.tmpl
@@ -332,13 +348,13 @@ Only in repo/templates/user: notification
 Only in repo/templates/user: overview
 Only in repo/templates/user: profile.tmpl
 diff -u -r -P repo/templates/user/settings/account.tmpl run/custom/templates/user/settings/account.tmpl
---- repo/templates/user/settings/account.tmpl	2025-01-03 16:28:50.271106656 +0100
-+++ run/custom/templates/user/settings/account.tmpl	2025-01-03 16:52:54.787222550 +0100
+--- repo/templates/user/settings/account.tmpl	2025-03-09 19:10:04.033581670 +0100
++++ run/custom/templates/user/settings/account.tmpl	2025-03-09 19:20:45.984334174 +0100
 @@ -4,35 +4,7 @@
  			{{ctx.Locale.Tr "settings.password"}}
  		</h4>
  		<div class="ui attached segment">
--			{{if or (.SignedUser.IsLocal) (.SignedUser.IsOAuth2)}}
+-			{{if and (not ($.UserDisabledFeatures.Contains "manage_credentials")) (or (.SignedUser.IsLocal) (.SignedUser.IsOAuth2))}}
 -			<form class="ui form ignore-dirty" action="{{AppSubUrl}}/user/settings/account" method="post">
 -				{{template "base/disable_form_autofill"}}
 -				{{.CsrfTokenHtml}}
@@ -370,13 +386,13 @@ diff -u -r -P repo/templates/user/settings/account.tmpl run/custom/templates/use
 +			<a class="ui button" href="https://idp.warpcs.org/manage/account/password/">Change SSO password</a>
  		</div>
  
- 		<h4 class="ui top attached header">
+ 		{{if not (and ($.UserDisabledFeatures.Contains "manage_credentials") (not $.EnableNotifyMail))}}
 Only in repo/templates/user/settings: actions.tmpl
 Only in repo/templates/user/settings: appearance.tmpl
 Only in repo/templates/user/settings: applications.tmpl
 diff -u -r -P repo/templates/user/settings/applications_oauth2.tmpl run/custom/templates/user/settings/applications_oauth2.tmpl
 --- repo/templates/user/settings/applications_oauth2.tmpl	2024-01-03 12:50:24.506934565 +0100
-+++ run/custom/templates/user/settings/applications_oauth2.tmpl	2025-01-03 16:52:54.788031915 +0100
++++ run/custom/templates/user/settings/applications_oauth2.tmpl	2025-03-09 19:13:24.322693065 +0100
 @@ -1,6 +1,11 @@
 +
 +{{if .IsAdmin}}
@@ -408,54 +424,25 @@ Only in repo/templates/user/settings: packages.tmpl
 Only in repo/templates/user/settings: packages_cleanup_rules_edit.tmpl
 Only in repo/templates/user/settings: packages_cleanup_rules_preview.tmpl
 diff -u -r -P repo/templates/user/settings/profile.tmpl run/custom/templates/user/settings/profile.tmpl
---- repo/templates/user/settings/profile.tmpl	2025-01-03 16:28:50.296271753 +0100
-+++ run/custom/templates/user/settings/profile.tmpl	2025-01-03 16:58:23.266453402 +0100
-@@ -97,38 +97,8 @@
+--- repo/templates/user/settings/profile.tmpl	2025-03-09 19:10:04.049553761 +0100
++++ run/custom/templates/user/settings/profile.tmpl	2025-03-09 19:34:31.079574865 +0100
+@@ -101,8 +101,9 @@
  			{{ctx.Locale.Tr "settings.avatar"}}
  		</h4>
  		<div class="ui attached segment">
 -			<form class="ui form" action="{{.Link}}/avatar" method="post" enctype="multipart/form-data">
 -				{{.CsrfTokenHtml}}
--				{{if not .DisableGravatar}}
--				<div class="inline field">
--					<div class="ui radio checkbox">
--						<input name="source" value="lookup" type="radio" {{if not .SignedUser.UseCustomAvatar}}checked{{end}}>
--						<label>{{ctx.Locale.Tr "settings.lookup_avatar_by_mail"}}</label>
--					</div>
--				</div>
--				<div class="field tw-pl-4 {{if .Err_Gravatar}}error{{end}}">
--					<label for="gravatar">Avatar {{ctx.Locale.Tr "email"}}</label>
--					<input id="gravatar" name="gravatar" value="{{.SignedUser.AvatarEmail}}">
--				</div>
--				{{end}}
--
--				<div class="inline field">
--					<div class="ui radio checkbox">
--						<input name="source" value="local" type="radio" {{if .SignedUser.UseCustomAvatar}}checked{{end}}>
--						<label>{{ctx.Locale.Tr "settings.enable_custom_avatar"}}</label>
--					</div>
--				</div>
--
--				<div class="inline field tw-pl-4">
--					<label for="new-avatar">{{ctx.Locale.Tr "settings.choose_new_avatar"}}</label>
--					<input id="new-avatar" name="avatar" type="file" accept="image/png,image/jpeg,image/gif,image/webp">
--				</div>
--
--				<div class="field">
--					<button class="ui primary button">{{ctx.Locale.Tr "settings.update_avatar"}}</button>
--					<button class="ui red button link-action" data-url="{{.Link}}/avatar/delete">{{ctx.Locale.Tr "settings.delete_current_avatar"}}</button>
--				</div>
--			</form>
 +			<a class="ui button" href="https://idp.warpcs.org/manage/account/avatar/">Edit avatar</a><br /><br />
 +			You may need to re-login to see changes.
- 		</div>
- 	</div>
- {{template "user/settings/layout_footer" .}}
++			<form class="ui form" action="{{.Link}}/avatar" method="post" enctype="multipart/form-data" style="display: none;">
+ 				{{if not .DisableGravatar}}
+ 				<div class="inline field">
+ 					<div class="ui radio checkbox">
 Only in repo/templates/user/settings: repos.tmpl
 Only in repo/templates/user/settings: runner_edit.tmpl
 diff -u -r -P repo/templates/user/settings/security/accountlinks.tmpl run/custom/templates/user/settings/security/accountlinks.tmpl
 --- repo/templates/user/settings/security/accountlinks.tmpl	2024-01-03 12:50:24.531325417 +0100
-+++ run/custom/templates/user/settings/security/accountlinks.tmpl	2025-01-03 16:52:54.790451564 +0100
++++ run/custom/templates/user/settings/security/accountlinks.tmpl	2025-03-09 19:13:24.325733481 +0100
 @@ -2,22 +2,6 @@
  {{if or .AccountLinks .OrderedOAuth2Names}}
  <h4 class="ui top attached header">
@@ -505,19 +492,19 @@ diff -u -r -P repo/templates/user/settings/security/accountlinks.tmpl run/custom
  {{end}}
 Only in repo/templates/user/settings/security: openid.tmpl
 diff -u -r -P repo/templates/user/settings/security/security.tmpl run/custom/templates/user/settings/security/security.tmpl
---- repo/templates/user/settings/security/security.tmpl	2023-07-30 12:02:10.175866582 +0200
-+++ run/custom/templates/user/settings/security/security.tmpl	2025-01-03 16:52:54.791262025 +0100
-@@ -1,7 +1,6 @@
- {{template "user/settings/layout_head" (dict "ctxData" . "pageClass" "user settings security")}}
+--- repo/templates/user/settings/security/security.tmpl	2025-03-09 19:10:04.052235167 +0100
++++ run/custom/templates/user/settings/security/security.tmpl	2025-03-09 19:20:03.217093862 +0100
+@@ -3,7 +3,6 @@
  	<div class="user-setting-content">
+ 		{{if not ($.UserDisabledFeatures.Contains "manage_mfa")}}
  		{{template "user/settings/security/twofa" .}}
 -		{{template "user/settings/security/webauthn" .}}
+ 		{{end}}
+ 		{{if not ($.UserDisabledFeatures.Contains "manage_credentials")}}
  		{{template "user/settings/security/accountlinks" .}}
- 		{{if .EnableOpenIDSignIn}}
- 		{{template "user/settings/security/openid" .}}
 diff -u -r -P repo/templates/user/settings/security/twofa.tmpl run/custom/templates/user/settings/security/twofa.tmpl
 --- repo/templates/user/settings/security/twofa.tmpl	2025-01-03 16:28:50.302926545 +0100
-+++ run/custom/templates/user/settings/security/twofa.tmpl	2025-01-03 16:57:22.966388806 +0100
++++ run/custom/templates/user/settings/security/twofa.tmpl	2025-03-09 19:13:24.328019220 +0100
 @@ -3,35 +3,5 @@
  </h4>
  <div class="ui attached segment">
@@ -557,7 +544,7 @@ diff -u -r -P repo/templates/user/settings/security/twofa.tmpl run/custom/templa
  </div>
 diff -u -r -P repo/templates/user/settings/security/twofa_enroll.tmpl run/custom/templates/user/settings/security/twofa_enroll.tmpl
 --- repo/templates/user/settings/security/twofa_enroll.tmpl	2024-01-03 12:50:24.536903162 +0100
-+++ run/custom/templates/user/settings/security/twofa_enroll.tmpl	2025-01-03 16:53:05.655681495 +0100
++++ run/custom/templates/user/settings/security/twofa_enroll.tmpl	2025-03-09 19:13:24.328983025 +0100
 @@ -1,25 +1,4 @@
  {{template "user/settings/layout_head" (dict "ctxData" . "pageClass" "user settings twofa")}}
 -	<div class="user-setting-content">
