@@ -47,7 +47,7 @@
 			let text = mirrorTypeText[mirrorType];
 			if(!text)
 				continue;
-			mcHtml += '<a class="ui button" style="display: inline-block;padding: 2px;font-size: small;" href="' + mirrors[mirrorType] + '">' + text + '</a>';
+			mcHtml += '<a class="ui button" style="display: inline-block;padding: 2px;font-size: small;min-height: 20px;" href="' + mirrors[mirrorType] + '">' + text + '</a>';
 		}
 		linkContainer.innerHTML = mcHtml;
 		descEl.append(linkContainer);
