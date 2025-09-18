@@ -6,7 +6,7 @@ Only in repo/templates/base: disable_form_autofill.tmpl
 Only in repo/templates/base: footer.tmpl
 diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/footer_content.tmpl
 --- repo/templates/base/footer_content.tmpl	2025-03-09 19:10:03.657603874 +0100
-+++ run/custom/templates/base/footer_content.tmpl	2025-06-20 23:59:30.497438839 +0200
++++ run/custom/templates/base/footer_content.tmpl	2025-09-18 11:57:14.580483678 +0200
 @@ -1,20 +1,7 @@
  <footer class="page-footer" role="group" aria-label="{{ctx.Locale.Tr "aria.footer"}}">
  	<div class="left-links" role="contentinfo" aria-label="{{ctx.Locale.Tr "aria.footer.software"}}">
@@ -43,7 +43,7 @@ diff -u -r -P repo/templates/base/footer_content.tmpl run/custom/templates/base/
  </footer>
 diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
 --- repo/templates/base/head.tmpl	2025-06-20 23:38:50.915142504 +0200
-+++ run/custom/templates/base/head.tmpl	2025-06-20 23:59:30.498558018 +0200
++++ run/custom/templates/base/head.tmpl	2025-09-18 11:59:15.233082136 +0200
 @@ -7,7 +7,7 @@
  	<meta name="author" content="{{if .Repository}}{{.Owner.Name}}{{else}}{{MetaAuthor}}{{end}}">
  	<meta name="description" content="{{if .Repository}}{{.Repository.Name}}{{if .Repository.Description}} - {{.Repository.Description}}{{end}}{{else}}{{MetaDescription}}{{end}}">
@@ -70,7 +70,7 @@ diff -u -r -P repo/templates/base/head.tmpl run/custom/templates/base/head.tmpl
  	{{template "custom/body_outer_pre" .}}
 diff -u -r -P repo/templates/base/head_navbar.tmpl run/custom/templates/base/head_navbar.tmpl
 --- repo/templates/base/head_navbar.tmpl	2025-06-20 23:38:50.918608439 +0200
-+++ run/custom/templates/base/head_navbar.tmpl	2025-06-20 23:59:30.499724275 +0200
++++ run/custom/templates/base/head_navbar.tmpl	2025-09-18 11:57:14.583227142 +0200
 @@ -10,7 +10,7 @@
  	<div class="navbar-left">
  		<!-- the logo -->
@@ -125,7 +125,7 @@ Only in repo/templates: devtest
 Only in repo/templates: explore
 diff -u -r -P repo/templates/home.tmpl run/custom/templates/home.tmpl
 --- repo/templates/home.tmpl	2025-06-20 23:38:50.935265696 +0200
-+++ run/custom/templates/home.tmpl	2025-06-21 00:00:56.779838545 +0200
++++ run/custom/templates/home.tmpl	2025-09-18 11:57:14.584160490 +0200
 @@ -1,51 +1,27 @@
  {{template "base/head" .}}
  <div role="main" aria-label="{{if .IsSigned}}{{ctx.Locale.Tr "dashboard"}}{{else}}{{ctx.Locale.Tr "home"}}{{end}}" class="page-content home">
@@ -218,7 +218,7 @@ Only in repo/templates/user/auth: grant.tmpl
 Only in repo/templates/user/auth: grant_error.tmpl
 diff -u -r -P repo/templates/user/auth/link_account.tmpl run/custom/templates/user/auth/link_account.tmpl
 --- repo/templates/user/auth/link_account.tmpl	2025-03-09 19:10:04.010902382 +0100
-+++ run/custom/templates/user/auth/link_account.tmpl	2025-06-20 23:59:30.502298156 +0200
++++ run/custom/templates/user/auth/link_account.tmpl	2025-09-18 11:57:14.585063630 +0200
 @@ -4,29 +4,20 @@
  		<div class="overflow-menu-items tw-justify-center">
  			<!-- TODO handle .ShowRegistrationButton once other login bugs are fixed -->
@@ -258,7 +258,7 @@ Only in repo/templates/user/auth: reset_passwd.tmpl
 Only in repo/templates/user/auth: signin.tmpl
 diff -u -r -P repo/templates/user/auth/signin_inner.tmpl run/custom/templates/user/auth/signin_inner.tmpl
 --- repo/templates/user/auth/signin_inner.tmpl	2025-06-20 23:38:51.272938127 +0200
-+++ run/custom/templates/user/auth/signin_inner.tmpl	2025-06-21 00:03:44.077769851 +0200
++++ run/custom/templates/user/auth/signin_inner.tmpl	2025-09-18 11:57:14.585981978 +0200
 @@ -10,69 +10,10 @@
  		{{end}}
  	</h4>
@@ -347,7 +347,7 @@ Only in repo/templates/user: overview
 Only in repo/templates/user: profile.tmpl
 diff -u -r -P repo/templates/user/settings/account.tmpl run/custom/templates/user/settings/account.tmpl
 --- repo/templates/user/settings/account.tmpl	2025-06-20 23:38:51.303783040 +0200
-+++ run/custom/templates/user/settings/account.tmpl	2025-06-20 23:59:30.504873432 +0200
++++ run/custom/templates/user/settings/account.tmpl	2025-09-18 11:57:14.587037383 +0200
 @@ -4,35 +4,7 @@
  			{{ctx.Locale.Tr "settings.password"}}
  		</h4>
@@ -390,7 +390,7 @@ Only in repo/templates/user/settings: appearance.tmpl
 Only in repo/templates/user/settings: applications.tmpl
 diff -u -r -P repo/templates/user/settings/applications_oauth2.tmpl run/custom/templates/user/settings/applications_oauth2.tmpl
 --- repo/templates/user/settings/applications_oauth2.tmpl	2024-01-03 12:50:24.506934565 +0100
-+++ run/custom/templates/user/settings/applications_oauth2.tmpl	2025-06-20 23:59:30.505711867 +0200
++++ run/custom/templates/user/settings/applications_oauth2.tmpl	2025-09-18 11:57:14.587862046 +0200
 @@ -1,6 +1,11 @@
 +
 +{{if .IsAdmin}}
@@ -423,7 +423,7 @@ Only in repo/templates/user/settings: packages_cleanup_rules_edit.tmpl
 Only in repo/templates/user/settings: packages_cleanup_rules_preview.tmpl
 diff -u -r -P repo/templates/user/settings/profile.tmpl run/custom/templates/user/settings/profile.tmpl
 --- repo/templates/user/settings/profile.tmpl	2025-06-20 23:38:51.311798898 +0200
-+++ run/custom/templates/user/settings/profile.tmpl	2025-06-20 23:59:30.506800018 +0200
++++ run/custom/templates/user/settings/profile.tmpl	2025-09-18 11:57:14.588871581 +0200
 @@ -101,8 +101,9 @@
  			{{ctx.Locale.Tr "settings.avatar"}}
  		</h4>
@@ -440,7 +440,7 @@ Only in repo/templates/user/settings: repos.tmpl
 Only in repo/templates/user/settings: runner_edit.tmpl
 diff -u -r -P repo/templates/user/settings/security/accountlinks.tmpl run/custom/templates/user/settings/security/accountlinks.tmpl
 --- repo/templates/user/settings/security/accountlinks.tmpl	2024-01-03 12:50:24.531325417 +0100
-+++ run/custom/templates/user/settings/security/accountlinks.tmpl	2025-06-20 23:59:30.507731092 +0200
++++ run/custom/templates/user/settings/security/accountlinks.tmpl	2025-09-18 11:57:14.589727870 +0200
 @@ -2,22 +2,6 @@
  {{if or .AccountLinks .OrderedOAuth2Names}}
  <h4 class="ui top attached header">
@@ -491,7 +491,7 @@ diff -u -r -P repo/templates/user/settings/security/accountlinks.tmpl run/custom
 Only in repo/templates/user/settings/security: openid.tmpl
 diff -u -r -P repo/templates/user/settings/security/security.tmpl run/custom/templates/user/settings/security/security.tmpl
 --- repo/templates/user/settings/security/security.tmpl	2025-03-09 19:10:04.052235167 +0100
-+++ run/custom/templates/user/settings/security/security.tmpl	2025-06-20 23:59:30.508652829 +0200
++++ run/custom/templates/user/settings/security/security.tmpl	2025-09-18 11:57:14.590547812 +0200
 @@ -3,7 +3,6 @@
  	<div class="user-setting-content">
  		{{if not ($.UserDisabledFeatures.Contains "manage_mfa")}}
@@ -502,7 +502,7 @@ diff -u -r -P repo/templates/user/settings/security/security.tmpl run/custom/tem
  		{{template "user/settings/security/accountlinks" .}}
 diff -u -r -P repo/templates/user/settings/security/twofa.tmpl run/custom/templates/user/settings/security/twofa.tmpl
 --- repo/templates/user/settings/security/twofa.tmpl	2025-01-03 16:28:50.302926545 +0100
-+++ run/custom/templates/user/settings/security/twofa.tmpl	2025-06-20 23:59:30.509527390 +0200
++++ run/custom/templates/user/settings/security/twofa.tmpl	2025-09-18 11:57:14.591433621 +0200
 @@ -3,35 +3,5 @@
  </h4>
  <div class="ui attached segment">
@@ -542,7 +542,7 @@ diff -u -r -P repo/templates/user/settings/security/twofa.tmpl run/custom/templa
  </div>
 diff -u -r -P repo/templates/user/settings/security/twofa_enroll.tmpl run/custom/templates/user/settings/security/twofa_enroll.tmpl
 --- repo/templates/user/settings/security/twofa_enroll.tmpl	2024-01-03 12:50:24.536903162 +0100
-+++ run/custom/templates/user/settings/security/twofa_enroll.tmpl	2025-06-20 23:59:30.510350700 +0200
++++ run/custom/templates/user/settings/security/twofa_enroll.tmpl	2025-09-18 11:57:14.592259219 +0200
 @@ -1,25 +1,4 @@
  {{template "user/settings/layout_head" (dict "ctxData" . "pageClass" "user settings twofa")}}
 -	<div class="user-setting-content">

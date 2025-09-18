@@ -18,7 +18,7 @@
 		let path = window.location.pathname.split("/");
 		let mirrors = data[path[1] + "/" + path[2]];
 		if(mirrors){
-			let repoHeader = document.querySelector("div.page-content.repository div.ui.container div.repo-button-row");
+			let repoHeader = document.querySelector("div.page-content.repository div.ui.container div.repo-button-row div.repo-button-row-right");
 			if(!repoHeader)
 				return;
 			addRepoLink(repoHeader, mirrors, path.slice(3, 6), path.slice(6).join("/"));
@@ -75,7 +75,7 @@
 			}
 			buttonsWrapEl.innerHTML += '<a class="ui compact basic button" href="' + href + '">' + text + '</a>';
 		}
-		headerEl.insertBefore(buttonsWrapEl, headerEl.childNodes[2]);
+		headerEl.insertBefore(buttonsWrapEl, headerEl.childNodes[0]);
 	}
 
 	window.addEventListener("DOMContentLoaded", init);
